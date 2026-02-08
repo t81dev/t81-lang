@@ -1,0 +1,22 @@
+name: vm-compat
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check-vm-compat:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout t81-lang
+        uses: actions/checkout@v4
+      - name: Checkout t81-vm
+        uses: actions/checkout@v4
+        with:
+          repository: t81dev/t81-vm
+          path: t81-vm
+      - name: Run compatibility check
+        run: python3 scripts/check-vm-compat.py
+        env:
+          T81_VM_DIR: ${{ github.workspace }}/t81-vm

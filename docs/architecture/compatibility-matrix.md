@@ -2,13 +2,19 @@
 
 Snapshot date: 2026-02-08
 
-This matrix defines the expected contract between `t81-lang` compiler artifacts and `t81-foundation` runtime components.
+This matrix defines the expected contract between `t81-lang` compiler artifacts and runtime components in `t81-vm`.
 
 ## Versioning Model
 
 - `t81-lang` owns language syntax/semantics versioning.
-- `t81-foundation` owns runtime execution contract versioning.
+- `t81-vm` owns runtime execution contract versioning.
+- `t81-foundation` remains upstream normative source for spec language during migration.
 - Cross-repo compatibility is explicit and tested.
+
+Current runtime contract baseline:
+
+- `t81-vm` tag: `runtime-contract-v0.1`
+- Contract file: `t81-vm/docs/contracts/vm-compatibility.json`
 
 ## Contract Surface
 
@@ -16,9 +22,9 @@ This matrix defines the expected contract between `t81-lang` compiler artifacts 
 | :--- | :--- | :--- | :--- |
 | T81Lang grammar + AST shape | `t81-lang` | `t81-lang` tooling | No runtime dependency; versioned in language releases. |
 | Typed semantic model | `t81-lang` | `t81-lang` codegen | Deterministic diagnostics and canonicalization required. |
-| TISC IR text/binary encoding | `t81-lang` | `t81-foundation` (TISC loader/VM) | Must match accepted IR schema versions published by `t81-foundation`. |
-| Bytecode/program metadata manifest | `t81-lang` | `t81-foundation` (HanoiVM/Axion) | Must include declared format version and deterministic provenance hash fields. |
-| Axion policy handoff metadata | `t81-lang` | `t81-foundation` Axion kernel | Required fields cannot be silently dropped or renamed in minor versions. |
+| TISC IR text/binary encoding | `t81-lang` | `t81-vm` (TISC loader/VM) | Must match accepted IR schema versions published by `t81-vm` contract artifacts. |
+| Bytecode/program metadata manifest | `t81-lang` | `t81-vm` (HanoiVM/Axion runtime handoff) | Must include declared format version and deterministic provenance hash fields. |
+| Axion policy handoff metadata | `t81-lang` | `t81-vm` | Required fields cannot be silently dropped or renamed in minor versions. |
 
 ## Local Contract Layer
 
@@ -27,7 +33,7 @@ This matrix defines the expected contract between `t81-lang` compiler artifacts 
 ## Current State
 
 - Migrated language frontend/tests are now hosted in `t81-lang`.
-- Several end-to-end tests still reference runtime and CLI headers owned by `t81-foundation`.
+- Several end-to-end tests still reference runtime and CLI headers owned by `t81-foundation` and are being moved toward `t81-vm`.
 - During transition, these tests should run in one of two modes:
   - standalone language mode (parser/semantic tests),
   - integration mode (with `t81-foundation` headers/libs available).
@@ -41,8 +47,16 @@ A change is breaking and requires a major compatibility bump if it:
 - removes required metadata fields for Axion/runtime validation,
 - invalidates deterministic replay/provenance guarantees.
 
+## Release Cadence Rule
+
+- Any change that alters VM-facing opcode/format/manifest expectations must:
+  1. bump `t81-vm` contract version,
+  2. update this matrix in the same cycle,
+  3. pass `scripts/check-vm-compat.py` against the new contract.
+
 ## Minimum CI Gate (target)
 
 1. `t81-lang`: parser/semantic determinism suite passes.
-2. `t81-lang` + `t81-foundation`: integration suite passes for accepted artifact versions.
+2. `t81-lang` + `t81-vm`: integration suite passes for accepted artifact versions.
 3. Compatibility matrix is updated for any schema/opcode/manifest change.
+4. `scripts/check-vm-compat.py` passes against `t81-vm/docs/contracts/vm-compatibility.json`.
