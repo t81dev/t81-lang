@@ -14,7 +14,7 @@ jobs:
           - lane: floating
             vm_ref: main
           - lane: pinned
-            vm_ref: 3fd42f63d6e8c916aeff6d2332c6854e2127aa3b
+            vm_ref: 94a62c0f822eef42c8cad88c520ad99f7575ecef
     steps:
       - name: Checkout t81-lang
         uses: actions/checkout@v4
@@ -50,5 +50,5 @@ jobs:
 
       - name: Verify pinned baseline references
         run: |
-          rg -n "runtime-contract-v0.3" docs/architecture/compatibility-matrix.md
-          rg -n "3fd42f63d6e8c916aeff6d2332c6854e2127aa3b" docs/architecture/compatibility-matrix.md
+          rg -n "runtime-contract-v0.4" docs/architecture/compatibility-matrix.md
+          rg -n "94a62c0f822eef42c8cad88c520ad99f7575ecef" docs/architecture/compatibility-matrix.md
