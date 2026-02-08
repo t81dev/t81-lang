@@ -25,6 +25,7 @@ Scaffold phase. This repository now includes:
 - `docs/spec/language-scope.md`
 - `docs/migration/migrated-from-t81-foundation.tsv`
 - `CONTRIBUTING.md`
+- `CHANGELOG.md`
 - `ROADMAP.md`
 - `STATUS.md`
 
@@ -55,7 +56,7 @@ Additional migration/interop paths currently present:
 - `include/t81/frontend/`: migrated frontend headers.
 - `include/t81/tisc/`: minimal language-owned TISC contract headers.
 - `spec/`: migrated language specification and RFC documents.
-- `scripts/`: ecosystem sync and migration automation.
+- `scripts/`: ecosystem sync, compatibility, and migration automation.
 
 ## Ownership Boundary
 
