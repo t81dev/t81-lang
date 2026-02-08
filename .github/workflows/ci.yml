@@ -38,7 +38,7 @@ jobs:
           - lane: floating
             vm_ref: main
           - lane: pinned
-            vm_ref: 30306b32eea8b7acde1be354ed10d24881989225
+            vm_ref: fc9d55eba258aa2d17d7778e29e186f0bf62e2d8
     steps:
       - name: Checkout t81-lang
         uses: actions/checkout@v4
@@ -68,7 +68,7 @@ jobs:
           - lane: floating
             vm_ref: main
           - lane: pinned
-            vm_ref: 30306b32eea8b7acde1be354ed10d24881989225
+            vm_ref: fc9d55eba258aa2d17d7778e29e186f0bf62e2d8
     steps:
       - name: Checkout t81-lang
         uses: actions/checkout@v4
