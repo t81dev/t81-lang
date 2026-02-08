@@ -23,17 +23,16 @@ Repository foundation complete; migration execution in progress.
 
 ## In Progress
 
-- Select reference implementation language/toolchain for compiler frontend.
-- Define first executable milestone: parser + AST + deterministic formatting.
 - Dependency isolation plan so migrated language tests can run without bundling full runtime internals.
-- Compatibility matrix enforcement between emitted artifacts and `t81-foundation` runtime expectations.
+- Runtime-coupled test surface reduction (`tests/roundtrip/runtime-coupled-tests.txt`).
+- Compatibility matrix enforcement between emitted artifacts and `t81-vm` runtime contract expectations.
+- IR ownership decision for `t81/tisc/ir.hpp` and related interfaces (tracked in `t81-lang#3`).
 
 ## Blockers
 
-- No blocker for docs/planning track.
-- Implementation kickoff requires a final choice of build stack (e.g. Rust/C++/Python hybrid).
-- Migration execution depends on confirming which source-of-truth files remain mirrored in `t81-foundation` versus moved fully.
-- Some migrated tests currently depend on runtime/CLI headers still owned by `t81-foundation`; decoupling is pending.
+- No infra blockers; CI baseline is green.
+- VM parity P0 work in `t81-vm` is required before deeper integration lanes can expand (`t81-vm#2`, `t81-vm#3`).
+- Some migrated roundtrip tests still depend on runtime/CLI headers; decoupling remains pending (`t81-lang#3`).
 
 ## Exit Criteria For Foundation Phase
 
