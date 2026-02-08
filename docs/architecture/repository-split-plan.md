@@ -16,12 +16,12 @@ Move all language-specific concerns from `t81-foundation` into `t81-lang` while 
 - Language tests and language-focused examples.
 - Language user documentation and onboarding pages.
 
-## Scope Staying In `t81-foundation`
+## Scope Staying Outside `t81-lang`
 
-- HanoiVM runtime and bytecode execution behavior.
-- TISC op semantics and runtime validation.
-- Axion runtime safety kernel implementation.
-- Core deterministic numerics and system integration.
+- `t81-vm`: HanoiVM runtime and bytecode execution behavior.
+- `t81-vm`: TISC op semantics and runtime validation.
+- `t81-foundation`: upstream normative spec and Axion RFC source.
+- `t81-foundation`/adjacent runtime repos: core deterministic numerics and system integration.
 
 ## Migration Inventory Template
 
@@ -53,7 +53,7 @@ Use this table during extraction from `t81-foundation`:
 ## Compatibility Contract
 
 - `t81-lang` emits versioned TISC IR and bytecode manifest metadata.
-- `t81-foundation` publishes accepted compiler artifact versions.
+- `t81-vm` publishes accepted compiler artifact versions.
 - Any breaking change in compiler output format requires:
   - new format version,
   - migration note,

@@ -60,7 +60,8 @@ Additional migration/interop paths currently present:
 ## Ownership Boundary
 
 - `t81-lang` owns grammar, parser, AST, type system, codegen-to-TISC, language RFCs, language tests, and language examples.
-- `t81-foundation` owns TISC execution semantics, HanoiVM runtime behavior, Axion runtime policy, and platform/runtime integration.
+- `t81-vm` owns TISC execution semantics, HanoiVM runtime behavior, and host/runtime integration.
+- `t81-foundation` remains the upstream normative specification source during migration.
 - Shared contract changes require synchronized updates in both repositories with explicit compatibility notes.
 
 ## Why A Dedicated Repository
