@@ -20,14 +20,14 @@ while IFS= read -r rel; do
     continue
   fi
 
-  if ! rg -q '#include\s*[<"]t81/(vm|cli)/|#include\s*[<"]t81/tisc/(binary_emitter|binary_io)\.hpp' "${file}"; then
+  if ! grep -Eq '#include[[:space:]]*[<"]t81/(vm|cli)/|#include[[:space:]]*[<"]t81/tisc/(binary_emitter|binary_io)\.hpp' "${file}"; then
     echo "manifested file has no runtime-coupled include markers: ${rel}" >&2
     fail=1
   fi
 done < "${MANIFEST}"
 
 # Language-only suites must stay runtime-decoupled.
-if rg -n '#include\s*[<"]t81/(vm|cli)/' "${ROOT}/tests/syntax" "${ROOT}/tests/semantics"; then
+if grep -RInE '#include[[:space:]]*[<"]t81/(vm|cli)/' "${ROOT}/tests/syntax" "${ROOT}/tests/semantics"; then
   echo "language-only suites contain runtime includes; move these tests to integration lanes" >&2
   fail=1
 fi
