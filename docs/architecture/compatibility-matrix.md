@@ -56,7 +56,7 @@ A change is breaking and requires a major compatibility bump if it:
 
 ## Minimum CI Gate (target)
 
-1. `t81-lang`: parser/semantic determinism suite passes.
-2. `t81-lang` + `t81-vm`: integration suite passes for accepted artifact versions.
-3. Compatibility matrix is updated for any schema/opcode/manifest change.
-4. `scripts/check-vm-compat.py` passes against `t81-vm/docs/contracts/vm-compatibility.json`.
+1. `t81-lang`: language-core suite passes (`scripts/check-lang-core.sh`).
+2. `t81-lang` + `t81-vm`: artifact roundtrip passes (`scripts/check-compiler-roundtrip.sh`).
+3. `t81-lang` + `t81-vm`: runtime compatibility gate passes (`scripts/check-vm-compat.py`).
+4. Compatibility matrix is updated for any schema/opcode/manifest change.
