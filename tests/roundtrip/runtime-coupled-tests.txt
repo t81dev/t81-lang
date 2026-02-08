@@ -1,0 +1,13 @@
+tests/roundtrip/cli_option_result_test.cpp
+tests/roundtrip/cli_record_enum_test.cpp
+tests/roundtrip/cli_structural_types_test.cpp
+tests/roundtrip/e2e_advanced_features_test.cpp
+tests/roundtrip/e2e_arithmetic_test.cpp
+tests/roundtrip/e2e_if_statement_test.cpp
+tests/roundtrip/e2e_let_statement_test.cpp
+tests/roundtrip/e2e_loop_statement_test.cpp
+tests/roundtrip/e2e_match_expression_test.cpp
+tests/roundtrip/e2e_option_result_function_test.cpp
+tests/roundtrip/e2e_option_result_test.cpp
+tests/roundtrip/e2e_option_type_test.cpp
+tests/roundtrip/lang_literal_pool_test.cpp

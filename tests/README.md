@@ -21,3 +21,5 @@ Some `e2e_*` and `cli_*` tests currently include runtime/CLI headers from `t81-f
 
 - language-only suites in this repo (frontend/parser/semantic),
 - integration suites with `t81-foundation` available in include/library paths.
+
+Runtime-coupled integration tests are explicitly listed in `tests/roundtrip/runtime-coupled-tests.txt` and enforced by `scripts/check-runtime-coupled-tests.sh`.

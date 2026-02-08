@@ -40,6 +40,12 @@ Examples:
 - `tests/roundtrip/e2e_advanced_features_test.cpp`
 - `tests/roundtrip/cli_structural_types_test.cpp`
 
+Control added in this pass:
+
+- Manifest of runtime-coupled tests: `tests/roundtrip/runtime-coupled-tests.txt`
+- CI guard: `scripts/check-runtime-coupled-tests.sh`
+- CI lane: `runtime-coupled-surface` in `.github/workflows/ci.yml`
+
 ## Language-Only Test Check
 
 - `tests/syntax/frontend_parser_test.cpp`: passes when compiled and run locally with frontend sources.
@@ -51,4 +57,4 @@ Examples:
 2. Split test lanes:
    - language-only tests (self-contained in `t81-lang`),
    - integration tests (require `t81-foundation`).
-3. Add CI jobs that make this split explicit.
+3. Shrink `tests/roundtrip/runtime-coupled-tests.txt` monotonically as runtime-coupled tests migrate to `t81-vm`/ecosystem integration suites.
