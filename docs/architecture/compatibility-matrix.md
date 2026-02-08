@@ -13,8 +13,10 @@ This matrix defines the expected contract between `t81-lang` compiler artifacts 
 
 Current runtime contract baseline:
 
-- `t81-vm` tag: `runtime-contract-v0.1`
-- `t81-vm` commit pin (`main`): `23a1003`
+- `t81-vm` latest tagged baseline: `runtime-contract-v0.1`
+- `t81-vm` current migration pin (`main`): `30306b3`
+- `t81-vm` contract version at migration pin: `2026-02-08-v2`
+- `runtime-contract-v0.2` status: prepared, not tagged
 - Contract file: `t81-vm/docs/contracts/vm-compatibility.json`
 
 ## Contract Surface
