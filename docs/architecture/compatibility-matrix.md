@@ -11,6 +11,11 @@ This matrix defines the expected contract between `t81-lang` compiler artifacts 
 - `t81-foundation` remains upstream normative source for spec language during migration.
 - Cross-repo compatibility is explicit and tested.
 
+Current runtime contract baseline:
+
+- `t81-vm` tag: `runtime-contract-v0.1`
+- Contract file: `t81-vm/docs/contracts/vm-compatibility.json`
+
 ## Contract Surface
 
 | Surface | Producer | Consumer | Compatibility Rule |
@@ -41,6 +46,13 @@ A change is breaking and requires a major compatibility bump if it:
 - changes binary layout consumed by TISC/bytecode loaders,
 - removes required metadata fields for Axion/runtime validation,
 - invalidates deterministic replay/provenance guarantees.
+
+## Release Cadence Rule
+
+- Any change that alters VM-facing opcode/format/manifest expectations must:
+  1. bump `t81-vm` contract version,
+  2. update this matrix in the same cycle,
+  3. pass `scripts/check-vm-compat.py` against the new contract.
 
 ## Minimum CI Gate (target)
 

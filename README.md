@@ -76,6 +76,7 @@ Additional migration/interop paths currently present:
 - Initial migration source: local `t81-foundation` checkout.
 - Canonical migration script: `scripts/migrate-from-foundation.sh`.
 - Migration traceability manifest: `docs/migration/migrated-from-t81-foundation.tsv`.
+- Canary bytecode emitter for cross-repo validation: `scripts/emit-canary-bytecode.py`.
 
 ## Ecosystem Source
 
