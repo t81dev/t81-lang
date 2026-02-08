@@ -32,6 +32,13 @@ jobs:
   compiler-runtime-roundtrip:
     runs-on: ubuntu-latest
     needs: [language-core, runtime-coupled-surface]
+    strategy:
+      matrix:
+        include:
+          - lane: floating
+            vm_ref: main
+          - lane: pinned
+            vm_ref: 23a1003
     steps:
       - name: Checkout t81-lang
         uses: actions/checkout@v4
@@ -43,16 +50,25 @@ jobs:
         with:
           repository: t81dev/t81-vm
           path: t81-vm
+          ref: ${{ matrix.vm_ref }}
 
       - name: Run compiler/runtime artifact roundtrip
+        env:
+          VM_COMPAT_LANE: ${{ matrix.lane }}
+          T81_VM_DIR: ${{ github.workspace }}/t81-vm
         run: scripts/check-compiler-roundtrip.sh
         working-directory: t81-lang
-        env:
-          T81_VM_DIR: ${{ github.workspace }}/t81-vm
 
   runtime-contract-compat:
     runs-on: ubuntu-latest
     needs: [language-core, runtime-coupled-surface]
+    strategy:
+      matrix:
+        include:
+          - lane: floating
+            vm_ref: main
+          - lane: pinned
+            vm_ref: 23a1003
     steps:
       - name: Checkout t81-lang
         uses: actions/checkout@v4
@@ -64,9 +80,11 @@ jobs:
         with:
           repository: t81dev/t81-vm
           path: t81-vm
+          ref: ${{ matrix.vm_ref }}
 
       - name: Run runtime compatibility gate
+        env:
+          VM_COMPAT_LANE: ${{ matrix.lane }}
+          T81_VM_DIR: ${{ github.workspace }}/t81-vm
         run: python3 scripts/check-vm-compat.py
         working-directory: t81-lang
-        env:
-          T81_VM_DIR: ${{ github.workspace }}/t81-vm
