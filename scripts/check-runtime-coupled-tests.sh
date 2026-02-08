@@ -3,9 +3,14 @@ set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 MANIFEST="${ROOT}/tests/roundtrip/runtime-coupled-tests.txt"
+JUSTIFICATION="${ROOT}/docs/migration/runtime-coupled-justification.md"
 
 if [[ ! -f "${MANIFEST}" ]]; then
   echo "missing manifest: ${MANIFEST}" >&2
+  exit 1
+fi
+if [[ ! -f "${JUSTIFICATION}" ]]; then
+  echo "missing justification ledger: ${JUSTIFICATION}" >&2
   exit 1
 fi
 
@@ -22,6 +27,11 @@ while IFS= read -r rel; do
 
   if ! grep -Eq '#include[[:space:]]*[<"]t81/(vm|cli)/|#include[[:space:]]*[<"]t81/tisc/(binary_emitter|binary_io)\.hpp' "${file}"; then
     echo "manifested file has no runtime-coupled include markers: ${rel}" >&2
+    fail=1
+  fi
+
+  if ! grep -Fq -- "- ${rel}:" "${JUSTIFICATION}"; then
+    echo "manifested file missing explicit justification: ${rel}" >&2
     fail=1
   fi
 done < "${MANIFEST}"

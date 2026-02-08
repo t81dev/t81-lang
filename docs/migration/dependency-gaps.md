@@ -45,6 +45,7 @@ Control added in this pass:
 - Manifest of runtime-coupled tests: `tests/roundtrip/runtime-coupled-tests.txt`
 - CI guard: `scripts/check-runtime-coupled-tests.sh`
 - CI lane: `runtime-coupled-surface` in `.github/workflows/ci.yml`
+- Justification ledger for unchanged entries: `docs/migration/runtime-coupled-justification.md`
 
 ## Language-Only Test Check
 
@@ -53,8 +54,19 @@ Control added in this pass:
 
 ## Next Extraction Slice
 
-1. Decide whether `t81/tisc/ir.hpp` (and related IR interfaces) moves to `t81-lang` or to a shared contract package.
-2. Split test lanes:
+1. Split test lanes:
    - language-only tests (self-contained in `t81-lang`),
    - integration tests (require `t81-foundation`).
-3. Shrink `tests/roundtrip/runtime-coupled-tests.txt` monotonically as runtime-coupled tests migrate to `t81-vm`/ecosystem integration suites.
+2. Shrink `tests/roundtrip/runtime-coupled-tests.txt` monotonically as runtime-coupled tests migrate to `t81-vm`/ecosystem integration suites.
+
+## IR Ownership Resolution
+
+Decision: keep `t81/tisc/ir.hpp` and related compiler-facing interfaces language-owned in `t81-lang` during current migration phase.
+
+- Decision record: `docs/migration/ir-ownership-decision.md`
+- Trigger conditions for future extraction to shared package are documented in that decision record.
+
+## Runtime-Coupled Surface Status
+
+- Manifest size is unchanged in this pass.
+- Each entry now has explicit rationale and destination context in `docs/migration/runtime-coupled-justification.md`.

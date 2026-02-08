@@ -44,6 +44,12 @@ Use this table during extraction from `t81-foundation`:
 5. Add compatibility matrix validating compiler output against HanoiVM expectations.
 6. Cut first independent `t81-lang` pre-release tag (example: `v0.1.0-alpha`).
 
+## Current Decision Log
+
+- `t81/tisc/ir.hpp` ownership: stays in `t81-lang` for the current migration phase.
+  - Reference: `docs/migration/ir-ownership-decision.md`.
+  - Revisit only after parity and integration criteria in that document are met.
+
 ## Automation
 
 - Repeatable migration sync script: `scripts/migrate-from-foundation.sh`.
