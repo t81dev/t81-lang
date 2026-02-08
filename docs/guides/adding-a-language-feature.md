@@ -1,0 +1,311 @@
+---
+layout: page
+title: "Guide: Adding a Language Feature"
+---
+
+# Guide: Adding a Feature to T81Lang
+
+<!-- T81-TOC:BEGIN -->
+
+## Table of Contents
+
+- [Guide: Adding a Feature to T81Lang](#guide-adding-a-feature-to-t81lang)
+  - [1. Frontend Architecture Overview](#1-frontend-architecture-overview)
+  - [2. Step 1: Update the Lexer](#2-step-1-update-the-lexer)
+    - [2.1 Add the Token Type](#21-add-the-token-type)
+    - [2.2 Recognize the Lexeme](#22-recognize-the-lexeme)
+  - [3. Step 2: Update the Parser](#3-step-2-update-the-parser)
+    - [3.1 Update the Grammar Rule](#31-update-the-grammar-rule)
+  - [4. Step 3: Update the IR Generator](#4-step-3-update-the-ir-generator)
+    - [4.1 Implement the Visitor Logic](#41-implement-the-visitor-logic)
+  - [5. Step 4: Write an End-to-End Test](#5-step-4-write-an-end-to-end-test)
+  - [6. Step 5: Reinforce the Semantic Analyzer](#6-step-5-reinforce-the-semantic-analyzer)
+
+<!-- T81-TOC:END -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+This guide provides a step-by-step walkthrough for adding a new feature to the T81Lang language. We will use the example of adding a new binary operator, the modulo operator (`%`), to illustrate the process.
+
+**Companion Documents:**
+- **Specification:** [`spec/t81lang-spec.md`](../../spec/t81lang-spec.md)
+- **Architecture:** [`ARCHITECTURE.md`](../../ARCHITECTURE.md)
+- **Key Source Files:**
+    - `include/t81/frontend/lexer.hpp`, `parser.hpp`, `ir_generator.hpp`
+    - `src/frontend/lexer.cpp`, `parser.cpp`, `ir_generator.cpp`
+- **Tests:** `tests/syntax/*.cpp`, `tests/semantics/*.cpp`, `tests/roundtrip/*.cpp`
+
+______________________________________________________________________
+
+## 1. Frontend Architecture Overview
+
+The T81Lang compiler frontend is responsible for converting `.t81` source code into TISC IR. It follows a classic pipeline:
+
+1.  **Lexer:** Converts source text into a stream of tokens.
+2.  **Parser:** Builds an Abstract Syntax Tree (AST) from the token stream.
+3.  **Semantic Analyzer:** (Currently a stub) Traverses the AST to check for type errors and resolve symbols. **This is a high-priority area for new development.**
+4.  **IR Generator:** Traverses the AST to produce a linear sequence of TISC instructions.
+
+This guide will walk you through modifying the Lexer, Parser, and IR Generator.
+
+______________________________________________________________________
+
+## 2. Step 1: Update the Lexer
+
+First, teach the lexer to recognize the new syntax.
+
+### 2.1 Add the Token Type
+
+In `include/t81/frontend/lexer.hpp`, add a new entry to the `TokenType` enum.
+
+```cpp
+// in enum class TokenType
+// ...
+Plus, Minus, Star, Slash, Percent, // <-- Add Percent
+// ...
+```
+
+### 2.2 Recognize the Lexeme
+
+In `src/frontend/lexer.cpp`, find the `next_token()` method and add a case for the `%` character in the `switch` statement.
+
+```cpp
+// in Lexer::next_token()
+switch (c) {
+    // ...
+    case '%': return make_token(TokenType::Percent);
+    // ...
+}
+```
+
+______________________________________________________________________
+
+## 3. Step 2: Update the Parser
+
+Next, update the parser to understand the operator's precedence. The modulo operator has the same precedence as multiplication and division.
+
+### 3.1 Update the Grammar Rule
+
+In `src/frontend/parser.cpp`, find the `factor()` method. Update the `while` loop to include `TokenType::Percent`.
+
+```cpp
+// in Parser::factor()
+std::unique_ptr<Expr> Parser::factor() {
+    std::unique_ptr<Expr> expr = unary();
+    // Add TokenType::Percent to this list
+    while (match({TokenType::Slash, TokenType::Star, TokenType::Percent})) {
+        Token op = previous();
+        std::unique_ptr<Expr> right = unary();
+        expr = std::make_unique<BinaryExpr>(std::move(expr), op, std::move(right));
+    }
+    return expr;
+}
+```
+The parser can now correctly place the modulo operator in the AST.
+
+______________________________________________________________________
+
+## 4. Step 3: Update the IR Generator
+
+Finally, teach the IR generator how to convert the new AST node into a TISC instruction.
+
+### 4.1 Implement the Visitor Logic
+
+In `src/frontend/ir_generator.cpp`, find the `visit(const BinaryExpr& expr)` method. Add a `case` for `TokenType::Percent`.
+
+```cpp
+// in IRGenerator::visit(const BinaryExpr& expr)
+std::any IRGenerator::visit(const BinaryExpr& expr) {
+    // ... (visit left and right operands)
+
+    switch (expr.op.type) {
+        // ...
+        case TokenType::Star:
+            emit({tisc::Opcode::Mul, {result, left, right}});
+            break;
+        case TokenType::Percent: // <-- Add this case
+            emit({tisc::Opcode::Mod, {result, left, right}});
+            break;
+        // ...
+    }
+    return result;
+}
+```
+The compiler can now generate the `Mod` TISC instruction.
+
+______________________________________________________________________
+
+## 5. Step 4: Write an End-to-End Test
+
+No feature is complete without a test. An end-to-end test is the best way to validate this change.
+
+1.  **Create a Test File:** Add a new file in `tests/roundtrip/`, such as `e2e_mod_test.cpp`.
+2.  **Write the Test:** The test should compile a snippet of T81Lang code using `%` and then execute it on the VM, asserting the final result is correct. See `tests/roundtrip/e2e_arithmetic_test.cpp` for a complete example.
+3.  **Add to CMake:** Add your new test file as an executable and test target in the root `CMakeLists.txt`.
+
+This process—**Lexer -> Parser -> IR Generator -> E2E Test**—is the standard workflow for adding new language features.
+
+## 6. Step 5: Reinforce the Semantic Analyzer
+
+The semantic analyzer enforces the invariants described in [`spec/t81lang-spec.md`](../../spec/t81lang-spec.md)
+(sections §2.1 on generic types and §6.2 on `match` semantics). When you evolve the grammar
+(see `RFC-0011` for the modern generic syntax) you must also extend `SemanticAnalyzer` so
+generic inference, `Option`/`Result` exhaustiveness, and match lowering remain correct.
+
+- **Generic inference:** Update `SemanticAnalyzer::visit(GenericTypeExpr)` to treat the first
+  parameter as a type and later parameters as compile-time constants (integer literals or
+  symbolic identifiers). Store the constants as a dedicated `Type::Kind::Constant` so the
+  analyzer can distinguish `Tensor[T, 2, 3]` from `Tensor[T, 3, 2]` and enforce shape-aware
+  assignments.
+- **Option/Result exhaustiveness:** The analyzer must ensure each `match` over structural
+  types declares exactly one arm per variant (`Some`/`None` or `Ok`/`Err`) and that all
+  arms produce a consistent result type. Use the `_expected_type_stack` to enforce that
+  constructors like `Some`, `Ok`, and `Err` observe the contextual `Option[T]`/`Result[T, E]`
+  and fail early when the wrong constructors or missing arms appear.
+- **Match lowering readiness:** Only allow matches whose scrutinee is a validated `Option`
+  or `Result`; otherwise the IR generator cannot emit the required `OPTION_IS_SOME`,
+  `OPTION_UNWRAP`, `RESULT_IS_OK`, or `RESULT_UNWRAP_*` sequences. Any change here should be
+  covered by the semantic analyzer regression tests (`tests/semantics/semantic_analyzer_match_test.cpp`
+  and the new `tests/semantics/semantic_analyzer_generic_test.cpp`).
+
+Keeping the semantic analyzer in lockstep with the spec lets the IR generator assume it can
+emit deterministic TISC control flow without rechecking every invariant.

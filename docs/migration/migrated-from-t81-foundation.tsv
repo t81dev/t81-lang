@@ -1,0 +1,77 @@
+category	source_path	target_path	notes
+docs	/Users/t81dev/Code/t81-foundation/docs/guides/adding-a-language-feature.md	docs/guides/adding-a-language-feature.md	language contributor guide
+docs	/Users/t81dev/Code/t81-foundation/docs/guides/match-example.md	docs/guides/match-example.md	language contributor guide
+docs	/Users/t81dev/Code/t81-foundation/docs/guides/match-patterns.md	docs/guides/match-patterns.md	language contributor guide
+examples	/Users/t81dev/Code/t81-foundation/examples/advanced_datatypes_showcase.t81	examples/advanced_datatypes_showcase.t81	language example
+examples	/Users/t81dev/Code/t81-foundation/examples/advanced_monitor.t81	examples/advanced_monitor.t81	language example
+examples	/Users/t81dev/Code/t81-foundation/examples/all_types_showcase.t81	examples/all_types_showcase.t81	language example
+examples	/Users/t81dev/Code/t81-foundation/examples/bigint_demo.t81	examples/bigint_demo.t81	language example
+examples	/Users/t81dev/Code/t81-foundation/examples/bigint_fraction_verification.t81	examples/bigint_fraction_verification.t81	language example
+examples	/Users/t81dev/Code/t81-foundation/examples/cell_demo.t81	examples/cell_demo.t81	language example
+examples	/Users/t81dev/Code/t81-foundation/examples/data_types.t81	examples/data_types.t81	language example
+examples	/Users/t81dev/Code/t81-foundation/examples/float_demo.t81	examples/float_demo.t81	language example
+examples	/Users/t81dev/Code/t81-foundation/examples/fraction_demo.t81	examples/fraction_demo.t81	language example
+examples	/Users/t81dev/Code/t81-foundation/examples/graph_demo.t81	examples/graph_demo.t81	language example
+examples	/Users/t81dev/Code/t81-foundation/examples/hello_world.t81	examples/hello_world.t81	language example
+examples	/Users/t81dev/Code/t81-foundation/examples/high_rank_tensor_demo.t81	examples/high_rank_tensor_demo.t81	language example
+examples	/Users/t81dev/Code/t81-foundation/examples/match_demo.t81	examples/match_demo.t81	language example
+examples	/Users/t81dev/Code/t81-foundation/examples/matrix_demo.t81	examples/matrix_demo.t81	language example
+examples	/Users/t81dev/Code/t81-foundation/examples/option_result_match.t81	examples/option_result_match.t81	language example
+examples	/Users/t81dev/Code/t81-foundation/examples/quaternion_demo.t81	examples/quaternion_demo.t81	language example
+examples	/Users/t81dev/Code/t81-foundation/examples/string_demo.t81	examples/string_demo.t81	language example
+examples	/Users/t81dev/Code/t81-foundation/examples/tensor_demo.t81	examples/tensor_demo.t81	language example
+examples	/Users/t81dev/Code/t81-foundation/examples/ternary_verification.t81	examples/ternary_verification.t81	language example
+examples	/Users/t81dev/Code/t81-foundation/examples/vector_demo.t81	examples/vector_demo.t81	language example
+examples	/Users/t81dev/Code/t81-foundation/examples/weights_load_demo.t81	examples/weights_load_demo.t81	language example
+frontend	/Users/t81dev/Code/t81-foundation/include/t81/frontend/README.md	include/t81/frontend/README.md	core frontend implementation
+frontend	/Users/t81dev/Code/t81-foundation/include/t81/frontend/ast.hpp	include/t81/frontend/ast.hpp	core frontend implementation
+frontend	/Users/t81dev/Code/t81-foundation/include/t81/frontend/ir_generator.hpp	include/t81/frontend/ir_generator.hpp	core frontend implementation
+frontend	/Users/t81dev/Code/t81-foundation/include/t81/frontend/lexer.hpp	include/t81/frontend/lexer.hpp	core frontend implementation
+frontend	/Users/t81dev/Code/t81-foundation/include/t81/frontend/parser.hpp	include/t81/frontend/parser.hpp	core frontend implementation
+frontend	/Users/t81dev/Code/t81-foundation/include/t81/frontend/semantic_analyzer.hpp	include/t81/frontend/semantic_analyzer.hpp	core frontend implementation
+frontend	/Users/t81dev/Code/t81-foundation/include/t81/frontend/symbol_table.hpp	include/t81/frontend/symbol_table.hpp	core frontend implementation
+frontend	/Users/t81dev/Code/t81-foundation/src/frontend/README.md	src/frontend/README.md	frontend source
+frontend	/Users/t81dev/Code/t81-foundation/src/frontend/lexer.cpp	src/frontend/lexer.cpp	frontend source
+frontend	/Users/t81dev/Code/t81-foundation/src/frontend/parser.cpp	src/frontend/parser.cpp	frontend source
+frontend	/Users/t81dev/Code/t81-foundation/src/frontend/semantic_analyzer.cpp	src/frontend/semantic_analyzer.cpp	frontend source
+frontend	/Users/t81dev/Code/t81-foundation/src/frontend/symbol_table.cpp	src/frontend/symbol_table.cpp	frontend source
+lang-api	/Users/t81dev/Code/t81-foundation/include/t81/lang/ast.hpp	include/t81/lang/ast.hpp	legacy language API declarations
+lang-api	/Users/t81dev/Code/t81-foundation/include/t81/lang/compiler.hpp	include/t81/lang/compiler.hpp	legacy language API declarations
+lang-api	/Users/t81dev/Code/t81-foundation/include/t81/lang/parser.hpp	include/t81/lang/parser.hpp	legacy language API declarations
+lang-api	/Users/t81dev/Code/t81-foundation/include/t81/lang/types.hpp	include/t81/lang/types.hpp	legacy language API declarations
+lang-api	/Users/t81dev/Code/t81-foundation/src/lang/test.md	src/lang/test.md	migrated language notes
+spec	/Users/t81dev/Code/t81-foundation/spec/rfcs/RFC-0007-t81lang-standard-library.md	spec/rfcs/RFC-0007-t81lang-standard-library.md	language spec or RFC
+spec	/Users/t81dev/Code/t81-foundation/spec/rfcs/RFC-0011-t81lang-grammar-update.md	spec/rfcs/RFC-0011-t81lang-grammar-update.md	language spec or RFC
+spec	/Users/t81dev/Code/t81-foundation/spec/t81lang-spec.md	spec/t81lang-spec.md	language spec or RFC
+tests	/Users/t81dev/Code/t81-foundation/tests/cpp/cli_option_result_test.cpp	tests/roundtrip/cli_option_result_test.cpp	language-focused regression test/sample
+tests	/Users/t81dev/Code/t81-foundation/tests/cpp/cli_record_enum_test.cpp	tests/roundtrip/cli_record_enum_test.cpp	language-focused regression test/sample
+tests	/Users/t81dev/Code/t81-foundation/tests/cpp/cli_structural_types_test.cpp	tests/roundtrip/cli_structural_types_test.cpp	language-focused regression test/sample
+tests	/Users/t81dev/Code/t81-foundation/tests/cpp/e2e_advanced_features_test.cpp	tests/roundtrip/e2e_advanced_features_test.cpp	language-focused regression test/sample
+tests	/Users/t81dev/Code/t81-foundation/tests/cpp/e2e_arithmetic_test.cpp	tests/roundtrip/e2e_arithmetic_test.cpp	language-focused regression test/sample
+tests	/Users/t81dev/Code/t81-foundation/tests/cpp/e2e_if_statement_test.cpp	tests/roundtrip/e2e_if_statement_test.cpp	language-focused regression test/sample
+tests	/Users/t81dev/Code/t81-foundation/tests/cpp/e2e_let_statement_test.cpp	tests/roundtrip/e2e_let_statement_test.cpp	language-focused regression test/sample
+tests	/Users/t81dev/Code/t81-foundation/tests/cpp/e2e_loop_statement_test.cpp	tests/roundtrip/e2e_loop_statement_test.cpp	language-focused regression test/sample
+tests	/Users/t81dev/Code/t81-foundation/tests/cpp/e2e_match_expression_test.cpp	tests/roundtrip/e2e_match_expression_test.cpp	language-focused regression test/sample
+tests	/Users/t81dev/Code/t81-foundation/tests/cpp/e2e_option_result_function_test.cpp	tests/roundtrip/e2e_option_result_function_test.cpp	language-focused regression test/sample
+tests	/Users/t81dev/Code/t81-foundation/tests/cpp/e2e_option_result_test.cpp	tests/roundtrip/e2e_option_result_test.cpp	language-focused regression test/sample
+tests	/Users/t81dev/Code/t81-foundation/tests/cpp/e2e_option_type_test.cpp	tests/roundtrip/e2e_option_type_test.cpp	language-focused regression test/sample
+tests	/Users/t81dev/Code/t81-foundation/tests/cpp/frontend_fuzz_test.cpp	tests/syntax/frontend_fuzz_test.cpp	language-focused regression test/sample
+tests	/Users/t81dev/Code/t81-foundation/tests/cpp/frontend_ir_generator_relation_test.cpp	tests/roundtrip/frontend_ir_generator_relation_test.cpp	language-focused regression test/sample
+tests	/Users/t81dev/Code/t81-foundation/tests/cpp/frontend_ir_generator_test.cpp	tests/roundtrip/frontend_ir_generator_test.cpp	language-focused regression test/sample
+tests	/Users/t81dev/Code/t81-foundation/tests/cpp/frontend_lexer_test.cpp	tests/syntax/frontend_lexer_test.cpp	language-focused regression test/sample
+tests	/Users/t81dev/Code/t81-foundation/tests/cpp/frontend_parser_generics_test.cpp	tests/syntax/frontend_parser_generics_test.cpp	language-focused regression test/sample
+tests	/Users/t81dev/Code/t81-foundation/tests/cpp/frontend_parser_legacy_rejection_test.cpp	tests/syntax/frontend_parser_legacy_rejection_test.cpp	language-focused regression test/sample
+tests	/Users/t81dev/Code/t81-foundation/tests/cpp/frontend_parser_test.cpp	tests/syntax/frontend_parser_test.cpp	language-focused regression test/sample
+tests	/Users/t81dev/Code/t81-foundation/tests/cpp/lang_literal_pool_test.cpp	tests/roundtrip/lang_literal_pool_test.cpp	language-focused regression test/sample
+tests	/Users/t81dev/Code/t81-foundation/tests/cpp/semantic_analyzer_equality_test.cpp	tests/semantics/semantic_analyzer_equality_test.cpp	language-focused regression test/sample
+tests	/Users/t81dev/Code/t81-foundation/tests/cpp/semantic_analyzer_generic_test.cpp	tests/semantics/semantic_analyzer_generic_test.cpp	language-focused regression test/sample
+tests	/Users/t81dev/Code/t81-foundation/tests/cpp/semantic_analyzer_loop_test.cpp	tests/semantics/semantic_analyzer_loop_test.cpp	language-focused regression test/sample
+tests	/Users/t81dev/Code/t81-foundation/tests/cpp/semantic_analyzer_match_test.cpp	tests/semantics/semantic_analyzer_match_test.cpp	language-focused regression test/sample
+tests	/Users/t81dev/Code/t81-foundation/tests/cpp/semantic_analyzer_numeric_test.cpp	tests/semantics/semantic_analyzer_numeric_test.cpp	language-focused regression test/sample
+tests	/Users/t81dev/Code/t81-foundation/tests/cpp/semantic_analyzer_option_result_test.cpp	tests/semantics/semantic_analyzer_option_result_test.cpp	language-focused regression test/sample
+tests	/Users/t81dev/Code/t81-foundation/tests/cpp/semantic_analyzer_record_enum_test.cpp	tests/semantics/semantic_analyzer_record_enum_test.cpp	language-focused regression test/sample
+tests	/Users/t81dev/Code/t81-foundation/tests/cpp/semantic_analyzer_vector_literal_test.cpp	tests/semantics/semantic_analyzer_vector_literal_test.cpp	language-focused regression test/sample
+tests	/Users/t81dev/Code/t81-foundation/tests/cpp/test_utils.hpp	tests/common/test_utils.hpp	language-focused regression test/sample
+tests	/Users/t81dev/Code/t81-foundation/tests/harness/test_vectors/lang_samples/fib.t81	tests/harness/test_vectors/lang_samples/fib.t81	language sample vector
+tests	/Users/t81dev/Code/t81-foundation/tests/harness/test_vectors/lang_samples/hello_world.t81	tests/harness/test_vectors/lang_samples/hello_world.t81	language sample vector
+tests	/Users/t81dev/Code/t81-foundation/tests/harness/test_vectors/lang_samples/tensors.t81	tests/harness/test_vectors/lang_samples/tensors.t81	language sample vector
