@@ -1,0 +1,9 @@
+fn consume(t: T81Tensor[i32, 2, 2]) -> i32 {
+    let _ = t;
+    return 1;
+}
+
+fn main() -> i32 {
+    let t_value: T81Tensor[i32, 2, 2] = [1, 2, 3, 4];
+    return consume(t_value);
+}

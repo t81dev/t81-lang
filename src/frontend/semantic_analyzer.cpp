@@ -545,6 +545,17 @@ bool SemanticAnalyzer::is_assignable(const Type& target, const Type& value) cons
         return numeric_rank(value) <= numeric_rank(target);
     }
 
+    // MVP container coercion: vector literals currently infer `Vector` and are
+    // accepted as source values for matrix/tensor/graph typed destinations.
+    // This keeps first-class T81* surface syntax usable while richer shape/type
+    // semantics are expanded in later phases.
+    if ((target.kind == Type::Kind::Matrix ||
+         target.kind == Type::Kind::Tensor ||
+         target.kind == Type::Kind::Graph) &&
+        value.kind == Type::Kind::Vector) {
+        return true;
+    }
+
     if (target.kind == value.kind && (!target.params.empty() || !value.params.empty())) {
         if (target.kind == Type::Kind::Custom && target.custom_name != value.custom_name) {
             return false;
@@ -1059,6 +1070,10 @@ std::any SemanticAnalyzer::visit(const BinaryExpr& expr) {
 
     switch (expr.op.type) {
         case TokenType::Plus:
+            if (left_type.kind == Type::Kind::String && right_type.kind == Type::Kind::String) {
+                return Type{Type::Kind::String};
+            }
+            [[fallthrough]];
         case TokenType::Minus:
         case TokenType::Star:
         case TokenType::Slash:
@@ -1209,6 +1224,17 @@ std::any SemanticAnalyzer::visit(const CallExpr& expr) {
                 return make_error_type();
             }
             return Type{Type::Kind::I32};
+        }
+        if (func_name == "print") {
+            if (arg_types.size() != 1) {
+                error(var_expr->name, "The 'print' builtin expects exactly one argument.");
+                return make_error_type();
+            }
+            if (arg_types[0].kind != Type::Kind::String) {
+                error(var_expr->name, "The 'print' builtin expects a T81String argument.");
+                return make_error_type();
+            }
+            return Type{Type::Kind::Void};
         }
 
         auto* symbol = resolve_symbol(var_expr->name);
@@ -1681,6 +1707,22 @@ std::any SemanticAnalyzer::visit(const VariableExpr& expr) {
 
     auto* symbol = resolve_symbol(expr.name);
     if (!symbol) {
+        auto dot = name_str.find('.');
+        if (dot != std::string::npos && dot > 0 && dot + 1 < name_str.size()) {
+            Token base_token = expr.name;
+            base_token.lexeme = std::string_view(expr.name.lexeme.data(), dot);
+            auto* base_symbol = resolve_symbol(base_token);
+            if (base_symbol && base_symbol->type.kind == Type::Kind::Custom && !base_symbol->type.custom_name.empty()) {
+                auto record_it = _record_definitions.find(base_symbol->type.custom_name);
+                if (record_it != _record_definitions.end()) {
+                    const std::string field = name_str.substr(dot + 1);
+                    auto field_it = record_it->second.field_map.find(field);
+                    if (field_it != record_it->second.field_map.end()) {
+                        return field_it->second;
+                    }
+                }
+            }
+        }
         error(expr.name, "Undefined variable '" + name_str + "'.");
         return make_error_type();
     }

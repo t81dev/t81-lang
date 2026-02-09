@@ -1,0 +1,15 @@
+@effect
+@tier(2)
+fn main() -> i32 {
+    return 1;
+}
+
+// Invalid (for reference): a pure function calling an @effect function.
+// @effect
+// fn write_metric(x: i32) -> i32 {
+//     return x;
+// }
+//
+// fn broken() -> i32 {
+//     return write_metric(1);
+// }

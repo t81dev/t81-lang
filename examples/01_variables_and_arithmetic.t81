@@ -1,0 +1,4 @@
+fn main() -> i32 {
+    let total = 7 + 5;
+    return total - 2;
+}

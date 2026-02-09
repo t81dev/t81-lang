@@ -24,6 +24,9 @@ Scaffold phase. This repository now includes:
 - `docs/architecture/repository-split-plan.md`
 - `docs/architecture/compatibility-matrix.md`
 - `docs/spec/language-scope.md`
+- `examples/README.md`
+- `docs/migration/core-datatype-support-matrix.md`
+- `docs/migration/core-datatype-stabilization-plan.md`
 - `docs/migration/migrated-from-t81-foundation.tsv`
 - `CONTRIBUTING.md`
 - `CHANGELOG.md`
@@ -36,9 +39,14 @@ Scaffold phase. This repository now includes:
 make cli
 ./build/bin/t81-lang parse tests/harness/test_vectors/lang_samples/hello_world.t81
 ./build/bin/t81-lang check tests/harness/module_graph/ok/app/main.t81
+./build/bin/t81-lang emit-ir tests/harness/test_vectors/lang_samples/hello_world.t81
+./build/bin/t81-lang build tests/harness/test_vectors/lang_samples/hello_world.t81
+./build/bin/t81-lang build examples/00_hello_world.t81
 
 make test-lang-core
 make test-module-graph
+make test-cli-compile
+make test-examples
 make test-spec-coverage
 make test-determinism
 make all

@@ -30,6 +30,12 @@ Repository foundation complete; migration execution in progress.
 - Semantic suite stabilization completed; language-core lane now runs expanded semantic coverage.
 - `t81-lang check <entry.t81>` now validates import graph resolution, missing imports, and cycle detection.
 - Pure/effect boundary checks added: pure functions cannot call `@effect` functions.
+- CLI compile path expanded: `emit-ir`, `emit-bytecode`, and `build` commands now emit deterministic artifacts.
+- CLI smoke lane added: `scripts/check-cli-compile.sh` (wired into `make all`).
+- Tutorial examples curriculum added under `examples/` (`00` -> `06`) with `examples/README.md`.
+- Examples regression lane added: `scripts/check-examples-build.sh` (wired into `make all`).
+- Foundation core datatype mapping added: `docs/migration/core-datatype-support-matrix.md`.
+- Core datatype stabilization program defined: `docs/migration/core-datatype-stabilization-plan.md`.
 
 ## In Progress
 

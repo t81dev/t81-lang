@@ -1,0 +1,27 @@
+fn keep_symbol(value: T81Symbol) -> T81Symbol {
+    return value;
+}
+
+fn keep_bytes(value: T81Bytes) -> T81Bytes {
+    return value;
+}
+
+fn keep_base81(value: Base81String) -> Base81String {
+    return value;
+}
+
+fn main() -> i32 {
+    var symbol_value: T81Symbol;
+    var bytes_value: T81Bytes;
+    var base81_value: Base81String;
+
+    let symbol_copy: T81Symbol = keep_symbol(symbol_value);
+    let bytes_copy: T81Bytes = keep_bytes(bytes_value);
+    let base81_copy: Base81String = keep_base81(base81_value);
+
+    let sink_symbol: T81Symbol = symbol_copy;
+    let sink_bytes: T81Bytes = bytes_copy;
+    let sink_base81: Base81String = base81_copy;
+    let _ = sink_symbol;
+    return 0;
+}

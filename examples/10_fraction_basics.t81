@@ -1,0 +1,7 @@
+fn main() -> i32 {
+    let p: T81Fraction = 1;
+    let q: T81Fraction = 2;
+    let r: T81Fraction = p + q;
+    let _ = r;
+    return 0;
+}

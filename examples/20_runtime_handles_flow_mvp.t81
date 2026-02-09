@@ -1,0 +1,84 @@
+fn keep_agent(value: T81Agent) -> T81Agent {
+    return value;
+}
+
+fn keep_entropy(value: T81Entropy) -> T81Entropy {
+    return value;
+}
+
+fn keep_time(value: T81Time) -> T81Time {
+    return value;
+}
+
+fn keep_iostream(value: T81IOStream) -> T81IOStream {
+    return value;
+}
+
+fn keep_thread(value: T81Thread) -> T81Thread {
+    return value;
+}
+
+fn keep_network(value: T81Network) -> T81Network {
+    return value;
+}
+
+fn keep_discovery(value: T81Discovery) -> T81Discovery {
+    return value;
+}
+
+fn keep_qutrit(value: T81Qutrit) -> T81Qutrit {
+    return value;
+}
+
+fn keep_category(value: T81Category) -> T81Category {
+    return value;
+}
+
+fn keep_proof(value: T81Proof) -> T81Proof {
+    return value;
+}
+
+fn keep_reflection(value: T81Reflection) -> T81Reflection {
+    return value;
+}
+
+fn keep_cell(value: Cell) -> Cell {
+    return value;
+}
+
+fn keep_canonical_id(value: CanonicalId) -> CanonicalId {
+    return value;
+}
+
+fn main() -> i32 {
+    var agent_value: T81Agent;
+    var entropy_value: T81Entropy;
+    var time_value: T81Time;
+    var iostream_value: T81IOStream;
+    var thread_value: T81Thread;
+    var network_value: T81Network;
+    var discovery_value: T81Discovery;
+    var qutrit_value: T81Qutrit;
+    var category_value: T81Category;
+    var proof_value: T81Proof;
+    var reflection_value: T81Reflection;
+    var cell_value: Cell;
+    var canonical_id_value: CanonicalId;
+
+    let agent_copy: T81Agent = keep_agent(agent_value);
+    let entropy_copy: T81Entropy = keep_entropy(entropy_value);
+    let time_copy: T81Time = keep_time(time_value);
+    let iostream_copy: T81IOStream = keep_iostream(iostream_value);
+    let thread_copy: T81Thread = keep_thread(thread_value);
+    let network_copy: T81Network = keep_network(network_value);
+    let discovery_copy: T81Discovery = keep_discovery(discovery_value);
+    let qutrit_copy: T81Qutrit = keep_qutrit(qutrit_value);
+    let category_copy: T81Category = keep_category(category_value);
+    let proof_copy: T81Proof = keep_proof(proof_value);
+    let reflection_copy: T81Reflection = keep_reflection(reflection_value);
+    let cell_copy: Cell = keep_cell(cell_value);
+    let canonical_id_copy: CanonicalId = keep_canonical_id(canonical_id_value);
+
+    let _ = agent_copy;
+    return 0;
+}

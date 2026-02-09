@@ -19,12 +19,20 @@
 - Axion-safe behavior: undefined/overflow-sensitive operations are explicit and trapped.
 - Auditability: all compiled artifacts carry reproducible metadata and hashing.
 
-## Current Type Surface (implemented baseline)
+## Current Compile-Stable Type Surface
+
+- Primitive scalars: integer/bool-centric subset used by the compile-verified examples lane.
+- Function annotations: `@effect`, `@tier(n)` (validated in semantics and emitted in IR metadata).
+- Module/import declarations: parsed and graph-validated by `t81-lang check`.
+
+## Target Type Surface (stabilization program)
 
 - Primitive scalars: `i2`, `i8`, `i16`, `i32`, `T81BigInt`, `T81Float`, `T81Fraction`, `bool`
 - Structural core types: `Option[T]`, `Result[T, E]`
-- Collection/math types: `Vector[T]`, `Matrix[T]`, `Tensor[T, ...]`, `Graph[T]`
+- Collection/math types: `T81Vector[T]`, `T81Matrix[T]`, `T81Tensor[T, ...]`, `T81Graph[T]`
 - User-defined structural types: `record`, `enum`, generic aliases via `type`
+
+See `docs/migration/core-datatype-support-matrix.md` and `docs/migration/core-datatype-stabilization-plan.md` for the stepwise promotion path from runtime/core-only to compile-verified language support.
 
 ## Determinism Rules (implemented baseline)
 

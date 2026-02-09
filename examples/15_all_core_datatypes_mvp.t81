@@ -1,0 +1,50 @@
+fn main() -> i32 {
+    var core_t81int: T81Int;
+    var core_t81uint: T81UInt;
+    var core_bigint: T81BigInt;
+    var core_float: T81Float;
+    var core_fixed: T81Fixed;
+    var core_fraction: T81Fraction;
+    var core_complex: T81Complex;
+    var core_quaternion: T81Quaternion;
+    var core_prob: T81Prob;
+    var core_polynomial: T81Polynomial;
+
+    var core_symbol: T81Symbol;
+    var core_string: T81String;
+    var core_bytes: T81Bytes;
+    var core_base81: Base81String;
+
+    var core_list: T81List[i32];
+    var core_map: T81Map[i32, i32];
+    var core_set: T81Set[i32];
+    var core_tree: T81Tree[i32];
+    var core_stream: T81Stream[i32];
+    var core_vector: T81Vector[i32];
+    var core_matrix: T81Matrix[i32, 2, 2];
+    var core_tensor: T81Tensor[i32, 2, 2];
+    var core_graph: T81Graph[i32];
+
+    var core_option: Option[i32];
+    var core_result: Result[i32, T81String];
+    var core_maybe: T81Maybe[i32];
+    var core_result_internal: T81Result[i32, T81String];
+    var core_promise: T81Promise[i32];
+
+    var core_agent: T81Agent;
+    var core_entropy: T81Entropy;
+    var core_time: T81Time;
+    var core_iostream: T81IOStream;
+    var core_thread: T81Thread;
+    var core_network: T81Network;
+    var core_discovery: T81Discovery;
+    var core_qutrit: T81Qutrit;
+    var core_category: T81Category;
+    var core_proof: T81Proof;
+    var core_reflection: T81Reflection;
+
+    var core_cell: Cell;
+    var core_canonical_id: CanonicalId;
+
+    return 0;
+}

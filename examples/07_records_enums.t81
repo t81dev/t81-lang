@@ -1,0 +1,19 @@
+record Point {
+    x: i32;
+    y: i32;
+};
+
+enum Flag {
+    On;
+    Off;
+};
+
+fn main() -> i32 {
+    let point: Point = Point { x: 3, y: 4 };
+    let flag: Flag = Flag.On;
+    let _ = point;
+    if (flag == Flag.On) {
+        return 1;
+    }
+    return 0;
+}

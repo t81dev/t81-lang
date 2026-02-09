@@ -1,0 +1,7 @@
+fn main() -> i32 {
+    let a: T81BigInt = 5;
+    let b: T81BigInt = 7;
+    let total: T81BigInt = a + b;
+    let _ = total;
+    return 0;
+}

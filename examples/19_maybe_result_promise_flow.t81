@@ -1,0 +1,24 @@
+fn keep_maybe(value: T81Maybe[i32]) -> T81Maybe[i32] {
+    return value;
+}
+
+fn keep_internal_result(value: T81Result[i32, T81String]) -> T81Result[i32, T81String] {
+    return value;
+}
+
+fn keep_promise(value: T81Promise[i32]) -> T81Promise[i32] {
+    return value;
+}
+
+fn main() -> i32 {
+    var maybe_value: T81Maybe[i32];
+    var internal_result_value: T81Result[i32, T81String];
+    var promise_value: T81Promise[i32];
+
+    let maybe_copy: T81Maybe[i32] = keep_maybe(maybe_value);
+    let result_copy: T81Result[i32, T81String] = keep_internal_result(internal_result_value);
+    let promise_copy: T81Promise[i32] = keep_promise(promise_value);
+
+    let _ = maybe_copy;
+    return 0;
+}

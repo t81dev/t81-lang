@@ -1,0 +1,7 @@
+fn main() -> i32 {
+    let x: T81Float = 1.5;
+    let y: T81Float = 2.5;
+    let z: T81Float = x + y;
+    let _ = z;
+    return 0;
+}

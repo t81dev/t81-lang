@@ -1,0 +1,60 @@
+fn keep_list(value: T81List[i32]) -> T81List[i32] {
+    return value;
+}
+
+fn keep_map(value: T81Map[i32, i32]) -> T81Map[i32, i32] {
+    return value;
+}
+
+fn keep_set(value: T81Set[i32]) -> T81Set[i32] {
+    return value;
+}
+
+fn keep_tree(value: T81Tree[i32]) -> T81Tree[i32] {
+    return value;
+}
+
+fn keep_stream(value: T81Stream[i32]) -> T81Stream[i32] {
+    return value;
+}
+
+fn keep_vector(value: T81Vector[i32]) -> T81Vector[i32] {
+    return value;
+}
+
+fn keep_matrix(value: T81Matrix[i32, 2, 2]) -> T81Matrix[i32, 2, 2] {
+    return value;
+}
+
+fn keep_tensor(value: T81Tensor[i32, 2, 2]) -> T81Tensor[i32, 2, 2] {
+    return value;
+}
+
+fn keep_graph(value: T81Graph[i32]) -> T81Graph[i32] {
+    return value;
+}
+
+fn main() -> i32 {
+    var list_value: T81List[i32];
+    var map_value: T81Map[i32, i32];
+    var set_value: T81Set[i32];
+    var tree_value: T81Tree[i32];
+    var stream_value: T81Stream[i32];
+    var vector_value: T81Vector[i32];
+    var matrix_value: T81Matrix[i32, 2, 2];
+    var tensor_value: T81Tensor[i32, 2, 2];
+    var graph_value: T81Graph[i32];
+
+    let list_copy: T81List[i32] = keep_list(list_value);
+    let map_copy: T81Map[i32, i32] = keep_map(map_value);
+    let set_copy: T81Set[i32] = keep_set(set_value);
+    let tree_copy: T81Tree[i32] = keep_tree(tree_value);
+    let stream_copy: T81Stream[i32] = keep_stream(stream_value);
+    let vector_copy: T81Vector[i32] = keep_vector(vector_value);
+    let matrix_copy: T81Matrix[i32, 2, 2] = keep_matrix(matrix_value);
+    let tensor_copy: T81Tensor[i32, 2, 2] = keep_tensor(tensor_value);
+    let graph_copy: T81Graph[i32] = keep_graph(graph_value);
+
+    let _ = list_copy;
+    return 0;
+}

@@ -1,0 +1,42 @@
+fn keep_uint(value: T81UInt) -> T81UInt {
+    return value;
+}
+
+fn keep_fixed(value: T81Fixed) -> T81Fixed {
+    return value;
+}
+
+fn keep_complex(value: T81Complex) -> T81Complex {
+    return value;
+}
+
+fn keep_quaternion(value: T81Quaternion) -> T81Quaternion {
+    return value;
+}
+
+fn keep_prob(value: T81Prob) -> T81Prob {
+    return value;
+}
+
+fn keep_polynomial(value: T81Polynomial) -> T81Polynomial {
+    return value;
+}
+
+fn main() -> i32 {
+    var uint_value: T81UInt;
+    var fixed_value: T81Fixed;
+    var complex_value: T81Complex;
+    var quaternion_value: T81Quaternion;
+    var prob_value: T81Prob;
+    var polynomial_value: T81Polynomial;
+
+    let uint_copy: T81UInt = keep_uint(uint_value);
+    let fixed_copy: T81Fixed = keep_fixed(fixed_value);
+    let complex_copy: T81Complex = keep_complex(complex_value);
+    let quaternion_copy: T81Quaternion = keep_quaternion(quaternion_value);
+    let prob_copy: T81Prob = keep_prob(prob_value);
+    let polynomial_copy: T81Polynomial = keep_polynomial(polynomial_value);
+
+    let _ = uint_copy;
+    return 0;
+}

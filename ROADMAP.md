@@ -38,6 +38,13 @@ Current status (2026-02-09):
 - Type checking for balanced-ternary primitives.
 - Deterministic diagnostics and error codes.
 
+## M2.5: Core Datatype Stabilization (new)
+
+- Promote each core datatype from runtime-only/frontend-tested to compile-verified language support.
+- Maintain the source-of-truth matrix in `docs/migration/core-datatype-support-matrix.md`.
+- Enforce promotion criteria from `docs/migration/core-datatype-stabilization-plan.md`.
+- Keep `make all` green while expanding compile-verified examples coverage.
+
 ## M3: TISC IR
 
 - Lower AST/typed IR to TISC IR.

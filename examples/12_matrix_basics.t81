@@ -1,0 +1,9 @@
+fn consume(m: T81Matrix[i32, 2, 2]) -> i32 {
+    let _ = m;
+    return 1;
+}
+
+fn main() -> i32 {
+    let m_value: T81Matrix[i32, 2, 2] = [1, 2, 3, 4];
+    return consume(m_value);
+}

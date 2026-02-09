@@ -1,17 +1,19 @@
 SHELL := /bin/bash
 
-.PHONY: help cli test-lang-core test-module-graph test-determinism test-runtime-coupled test-compat test-spec-coverage all
+.PHONY: help cli test-lang-core test-module-graph test-cli-compile test-examples test-determinism test-runtime-coupled test-compat test-spec-coverage all
 
 help:
 	@echo "Targets:"
 	@echo "  make cli                  Build build/bin/t81-lang"
 	@echo "  make test-lang-core       Run language-only test lane"
 	@echo "  make test-module-graph    Run import/module graph checks"
+	@echo "  make test-cli-compile     Run CLI parse/check/emit/build smoke checks"
+	@echo "  make test-examples        Build tutorial examples curriculum"
 	@echo "  make test-determinism     Run parser AST snapshot checks"
 	@echo "  make test-runtime-coupled Validate runtime-coupled manifest discipline"
 	@echo "  make test-spec-coverage   Validate spec coverage matrix hygiene"
 	@echo "  make test-compat          Run local compatibility gates (no VM checkout required)"
-	@echo "  make all                  Run lang-core + module-graph + determinism + runtime-coupled + spec coverage checks"
+	@echo "  make all                  Run lang-core + module-graph + cli-compile + examples + determinism + runtime-coupled + spec coverage checks"
 
 cli:
 	@scripts/build-t81-lang-cli.sh
@@ -21,6 +23,12 @@ test-lang-core:
 
 test-module-graph:
 	@scripts/check-module-graph.sh
+
+test-cli-compile:
+	@scripts/check-cli-compile.sh
+
+test-examples:
+	@scripts/check-examples-build.sh
 
 test-determinism:
 	@scripts/check-parser-determinism.sh
@@ -33,4 +41,4 @@ test-spec-coverage:
 
 test-compat: test-runtime-coupled
 
-all: test-lang-core test-module-graph test-determinism test-runtime-coupled test-spec-coverage
+all: test-lang-core test-module-graph test-cli-compile test-examples test-determinism test-runtime-coupled test-spec-coverage

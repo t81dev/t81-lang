@@ -1,0 +1,9 @@
+fn consume(g: T81Graph[i32]) -> i32 {
+    let _ = g;
+    return 1;
+}
+
+fn main() -> i32 {
+    let g_value: T81Graph[i32] = [1, 2, 3];
+    return consume(g_value);
+}
