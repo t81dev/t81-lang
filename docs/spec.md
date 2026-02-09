@@ -5,6 +5,7 @@ This file is the top-level, living specification entry point for T81Lang.
 ## Canonical Sources
 
 - Language scope: `docs/spec/language-scope.md`
+- Coverage matrix: `docs/spec/coverage-matrix.md`
 - Full migrated language spec: `spec/t81lang-spec.md`
 - Architecture constraints: `docs/architecture/compiler-architecture.md`
 - Compatibility contract: `docs/architecture/compatibility-matrix.md`
@@ -17,5 +18,7 @@ When behavior changes in parser, semantics, or codegen, update this file first w
 
 - Deterministic parsing and canonical AST shape.
 - Explicit ternary and structural type semantics.
+- Module/import declaration discipline and deterministic name resolution.
+- Explicit function effect/tier annotations (`@effect`, `@tier`).
 - Stable TISC IR lowering contract.
 - Reproducible diagnostics and artifact metadata.

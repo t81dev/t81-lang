@@ -1,59 +1,32 @@
-#include "t81/frontend/lexer.hpp"
-#include "t81/frontend/parser.hpp"
-#include "t81/frontend/semantic_analyzer.hpp"
+#include "../common/test_utils.hpp"
 
-#include <cassert>
 #include <iostream>
 #include <string>
-
-using namespace t81::frontend;
-
-void expect_semantic_success(const std::string& source, const char* label) {
-    Lexer lexer(source);
-    Parser parser(lexer);
-    [[maybe_unused]] auto stmts= parser.parse();
-    assert(!parser.had_error() && "Parser failed");
-
-    SemanticAnalyzer analyzer(stmts);
-    analyzer.analyze();
-    assert(!analyzer.had_error() && label);
-}
-
-void expect_semantic_failure(const std::string& source, const char* label) {
-    Lexer lexer(source);
-    Parser parser(lexer);
-    [[maybe_unused]] auto stmts= parser.parse();
-    if (parser.had_error()) return;
-
-    SemanticAnalyzer analyzer(stmts);
-    analyzer.analyze();
-    assert(analyzer.had_error() && label);
-}
 
 int main() {
     const std::string simple_vector = R"(
         fn main() -> i32 {
-            let v: Vector[i32] = [1, 2, 3];
+            let v = [1, 2, 3];
             return 0;
         }
     )";
     expect_semantic_success(simple_vector, "simple_vector");
 
-    const std::string float_vector = R"(
+    const std::string widened_vector = R"(
         fn main() -> i32 {
-            let v: Vector[Float] = [1, 2.5];
+            let v = [1, 2.5];
             return 0;
         }
     )";
-    expect_semantic_success(float_vector, "float_vector");
+    expect_semantic_success(widened_vector, "widened_vector");
 
-    const std::string no_context = R"(
+    const std::string empty_no_context = R"(
         fn main() -> i32 {
-            [[maybe_unused]] let v= [];
+            let v = [];
             return 0;
         }
     )";
-    expect_semantic_failure(no_context, "no_context");
+    expect_semantic_failure(empty_no_context, "empty_no_context");
 
     std::cout << "Semantic analyzer vector literal tests passed!" << std::endl;
     return 0;

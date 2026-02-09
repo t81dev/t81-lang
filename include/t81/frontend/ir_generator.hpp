@@ -220,12 +220,24 @@ public:
         return {};
     }
     std::any visit(const FunctionStmt& stmt) override {
+        tisc::ir::FunctionMetadata function_meta;
+        function_meta.name = std::string(stmt.name.lexeme);
+        function_meta.is_effectful = stmt.attributes.is_effectful;
+        function_meta.tier = stmt.attributes.tier;
+        _program.add_function_metadata(std::move(function_meta));
+
         if (std::string_view(stmt.name.lexeme) != "main") {
             return {};
         }
         for (const auto& statement : stmt.body) {
             statement->accept(*this);
         }
+        return {};
+    }
+    std::any visit(const ModuleDecl&) override {
+        return {};
+    }
+    std::any visit(const ImportDecl&) override {
         return {};
     }
     std::any visit(const TypeDecl& stmt) override {
@@ -290,6 +302,53 @@ public:
 
     // Expressions
     std::any visit(const BinaryExpr& expr) override {
+        if (expr.op.type == TokenType::AmpAmp || expr.op.type == TokenType::PipePipe) {
+            auto end_label = new_label();
+            auto eval_right = new_label();
+            auto false_label = new_label();
+            auto true_label = new_label();
+            auto dest = allocate_typed_register(tisc::ir::PrimitiveKind::Boolean);
+
+            expr.left->accept(*this);
+            auto left = ensure_expr_result(expr.left.get());
+
+            if (expr.op.type == TokenType::AmpAmp) {
+                emit_jump_if_zero(false_label, left);
+                emit_jump(eval_right);
+            } else {
+                emit_jump_if_not_zero(true_label, left);
+                emit_jump(eval_right);
+            }
+
+            emit_label(eval_right);
+            expr.right->accept(*this);
+            auto right = ensure_expr_result(expr.right.get());
+            emit_jump_if_zero(false_label, right);
+            emit_jump(true_label);
+
+            emit_label(false_label);
+            {
+                tisc::ir::Instruction instr;
+                instr.opcode = tisc::ir::Opcode::LOADI;
+                instr.operands = {dest.reg, tisc::ir::Immediate{0}};
+                instr.primitive = tisc::ir::PrimitiveKind::Boolean;
+                emit(instr);
+            }
+            emit_jump(end_label);
+
+            emit_label(true_label);
+            {
+                tisc::ir::Instruction instr;
+                instr.opcode = tisc::ir::Opcode::LOADI;
+                instr.operands = {dest.reg, tisc::ir::Immediate{1}};
+                instr.primitive = tisc::ir::PrimitiveKind::Boolean;
+                emit(instr);
+            }
+            emit_label(end_label);
+            record_result(&expr, dest);
+            return {};
+        }
+
         auto left = evaluate_expr(expr.left.get());
         auto right = evaluate_expr(expr.right.get());
         const Type* result_type = typed_expr(&expr);
@@ -387,6 +446,17 @@ public:
     }
 
     std::any visit(const LiteralExpr& expr) override {
+        if (expr.value.type == TokenType::True || expr.value.type == TokenType::False) {
+            auto dest = allocate_typed_register(tisc::ir::PrimitiveKind::Boolean);
+            auto instr = tisc::ir::Instruction{
+                tisc::ir::Opcode::LOADI,
+                {dest.reg, tisc::ir::Immediate{expr.value.type == TokenType::True ? 1 : 0}}
+            };
+            instr.primitive = tisc::ir::PrimitiveKind::Boolean;
+            emit(instr);
+            record_result(&expr, dest);
+            return {};
+        }
         if (expr.value.type == TokenType::String) {
             std::string contents = decode_string_literal(expr.value);
             auto dest = allocate_typed_register(tisc::ir::PrimitiveKind::Integer);

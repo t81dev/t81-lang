@@ -14,6 +14,7 @@ Current migrated test tracks:
 - `tests/semantics/`: semantic analyzer and type system checks
 - `tests/roundtrip/`: IR generation, e2e, and integration-style flows
 - `tests/common/`: shared test helpers
+- `tests/harness/test_vectors/ast_snapshots/`: parser determinism golden outputs
 
 ## Transition Note
 
@@ -23,3 +24,5 @@ Some `e2e_*` and `cli_*` tests currently include runtime/CLI headers from `t81-f
 - integration suites with `t81-foundation` available in include/library paths.
 
 Runtime-coupled integration tests are explicitly listed in `tests/roundtrip/runtime-coupled-tests.txt` and enforced by `scripts/check-runtime-coupled-tests.sh`.
+
+Parser determinism snapshots are enforced by `scripts/check-parser-determinism.sh`.

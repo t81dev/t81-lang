@@ -18,6 +18,7 @@ Scaffold phase. This repository now includes:
 ## Start Here
 
 - `docs/spec.md`
+- `docs/spec/coverage-matrix.md`
 - `docs/architecture/ecosystem-alignment.md`
 - `docs/architecture/compiler-architecture.md`
 - `docs/architecture/repository-split-plan.md`
@@ -28,6 +29,20 @@ Scaffold phase. This repository now includes:
 - `CHANGELOG.md`
 - `ROADMAP.md`
 - `STATUS.md`
+
+## Quick Commands
+
+```bash
+make cli
+./build/bin/t81-lang parse tests/harness/test_vectors/lang_samples/hello_world.t81
+./build/bin/t81-lang check tests/harness/module_graph/ok/app/main.t81
+
+make test-lang-core
+make test-module-graph
+make test-spec-coverage
+make test-determinism
+make all
+```
 
 ## Near-Term Deliverables
 

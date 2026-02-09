@@ -1,0 +1,6 @@
+module app.main;
+import app.does_not_exist;
+
+fn main() -> i32 {
+    return 0;
+}

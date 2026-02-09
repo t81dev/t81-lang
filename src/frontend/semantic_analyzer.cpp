@@ -130,7 +130,7 @@ void SemanticAnalyzer::exit_scope() {
 void SemanticAnalyzer::define_symbol(const Token& name, SymbolKind kind) {
     if (!_scopes.empty()) {
         std::string name_str = std::string(name.lexeme);
-        _scopes.back()[name_str] = SemanticSymbol{kind, name, Type{}, {}, false};
+        _scopes.back()[name_str] = SemanticSymbol{kind, name, Type{}, {}, false, std::nullopt, false};
     }
 }
 
@@ -660,6 +660,8 @@ void SemanticAnalyzer::register_function_signatures() {
         Type return_type = func->return_type ? analyze_type_expr(*func->return_type) : Type{Type::Kind::Void};
         symbol->param_types = param_types;
         symbol->type = return_type;
+        symbol->is_effectful = func->attributes.is_effectful;
+        symbol->tier = func->attributes.tier;
         symbol->is_defined = !param_error;
     }
 }
@@ -850,6 +852,10 @@ std::any SemanticAnalyzer::visit(const ReturnStmt& stmt) {
 }
 
 std::any SemanticAnalyzer::visit(const FunctionStmt& stmt) {
+    if (stmt.attributes.tier.has_value() && *stmt.attributes.tier <= 0) {
+        error(stmt.name, "Function tier must be a positive integer.");
+    }
+
     SemanticSymbol* symbol = resolve_symbol(stmt.name);
     if (!symbol) {
         define_symbol(stmt.name, SymbolKind::Function);
@@ -858,6 +864,7 @@ std::any SemanticAnalyzer::visit(const FunctionStmt& stmt) {
 
     enter_scope();
     _function_return_stack.push_back(symbol ? symbol->type : Type{Type::Kind::Unknown});
+    _function_effect_stack.push_back(stmt.attributes.is_effectful);
 
     if (symbol && symbol->param_types.size() != stmt.params.size()) {
         error(stmt.name, "Function parameter count mismatch between declaration and definition.");
@@ -887,8 +894,33 @@ std::any SemanticAnalyzer::visit(const FunctionStmt& stmt) {
     }
 
     _function_return_stack.pop_back();
+    _function_effect_stack.pop_back();
     exit_scope();
     return symbol ? symbol->type : Type{Type::Kind::Unknown};
+}
+
+std::any SemanticAnalyzer::visit(const ModuleDecl& stmt) {
+    if (_declared_module.has_value()) {
+        error(stmt.keyword, "Module already declared as '" + *_declared_module + "'.");
+        return {};
+    }
+    _declared_module = stmt.path;
+    return {};
+}
+
+std::any SemanticAnalyzer::visit(const ImportDecl& stmt) {
+    if (stmt.path.empty()) {
+        error(stmt.keyword, "Import path cannot be empty.");
+        return {};
+    }
+    if (stmt.path == _declared_module.value_or(std::string{})) {
+        error(stmt.keyword, "Module cannot import itself.");
+        return {};
+    }
+    if (!_imports.insert(stmt.path).second) {
+        error(stmt.keyword, "Duplicate import '" + stmt.path + "'.");
+    }
+    return {};
 }
 
 std::any SemanticAnalyzer::visit(const TypeDecl& stmt) {
@@ -1187,6 +1219,13 @@ std::any SemanticAnalyzer::visit(const CallExpr& expr) {
         if (symbol->kind != SymbolKind::Function) {
             error(var_expr->name, "'" + func_name + "' is not a function.");
             return make_error_type();
+        }
+
+        const bool caller_effectful = !_function_effect_stack.empty() && _function_effect_stack.back();
+        if (symbol->is_effectful && !caller_effectful) {
+            error(var_expr->name,
+                  "Pure function cannot call effectful function '" + func_name +
+                  "'. Add '@effect' to the caller.");
         }
 
         if (symbol->param_types.size() != arg_types.size()) {

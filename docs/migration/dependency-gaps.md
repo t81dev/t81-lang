@@ -1,6 +1,6 @@
 # Dependency Gaps After Initial Migration
 
-Snapshot date: 2026-02-08
+Snapshot date: 2026-02-09
 
 The first migration pass intentionally moved language-owned code first. Some files still include runtime-owned headers from `t81-foundation`.
 
@@ -50,7 +50,7 @@ Control added in this pass:
 ## Language-Only Test Check
 
 - `tests/syntax/frontend_parser_test.cpp`: passes when compiled and run locally with frontend sources.
-- `tests/syntax/frontend_lexer_test.cpp`: currently fails an assertion on token count and needs triage in this repository context.
+- `tests/syntax/frontend_lexer_test.cpp`: now passes in the language-core lane.
 
 ## Next Extraction Slice
 
@@ -68,5 +68,5 @@ Decision: keep `t81/tisc/ir.hpp` and related compiler-facing interfaces language
 
 ## Runtime-Coupled Surface Status
 
-- Manifest size is unchanged in this pass.
-- Each entry now has explicit rationale and destination context in `docs/migration/runtime-coupled-justification.md`.
+- Manifest shrank by one file in this pass by converting `tests/roundtrip/lang_literal_pool_test.cpp` to language-only deterministic coverage.
+- Remaining entries each have explicit rationale and destination context in `docs/migration/runtime-coupled-justification.md`.

@@ -10,6 +10,8 @@ The frontend is organized into a classic compiler pipeline:
 
 -   `parser.cpp`: The **Parser** consumes the token stream from the lexer and constructs an Abstract Syntax Tree (AST). The AST is a hierarchical representation of the code's structure, defined in `include/t81/frontend/ast.hpp`. This parser is a recursive-descent parser.
 
+-   `ast_printer.cpp`: Renders AST nodes into a deterministic canonical text form used by the `t81-lang parse` command and golden snapshot tests.
+
 -   `semantic_analyzer.cpp`: The **Semantic Analyzer** traverses the AST and enforces the semantic rules of T81Lang. This includes type checking, scope resolution, and other validation tasks that are not captured by the grammar alone. (Note: This component is currently under active development).
 
 -   `ir_generator.cpp`: The **IR Generator** walks the validated AST and emits a linear Intermediate Representation (IR) suitable for code generation. The TISC IR is defined in `include/t81/tisc/ir.hpp`.

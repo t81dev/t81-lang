@@ -15,3 +15,5 @@ This directory contains the public header files for the C++20 T81Lang compiler f
 -   `ir_generator.hpp`: Defines the `IRGenerator` class, which walks the AST and generates the TISC Intermediate Representation (IR).
 
 -   `symbol_table.hpp`: Defines the `SymbolTable` class, a helper data structure used for tracking identifiers and their associated information during parsing and semantic analysis.
+
+-   `ast_printer.hpp`: Defines `CanonicalAstPrinter`, used for deterministic AST rendering in the parser CLI and snapshot tests.

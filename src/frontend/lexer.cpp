@@ -25,7 +25,8 @@ inline std::string_view make_sv(It b, It e) noexcept {
 // ─────────────────────────────────────────────────────────────────────────────
 namespace {
 const std::unordered_map<std::string_view, TokenType> KEYWORDS = {
-    {"module", TokenType::Module}, {"type", TokenType::Type},     {"const", TokenType::Const},
+    {"module", TokenType::Module}, {"import", TokenType::Import}, {"type", TokenType::Type},
+    {"const", TokenType::Const},
     {"export", TokenType::Export}, {"fn", TokenType::Fn},         {"let", TokenType::Let},
     {"var", TokenType::Var},       {"if", TokenType::If},         {"else", TokenType::Else},
     {"for", TokenType::For},       {"in", TokenType::In},         {"while", TokenType::While},

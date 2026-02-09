@@ -1,1 +1,6 @@
+type TensorAlias[T, N] = Tensor[T, N];
 
+fn main() -> i32 {
+    let data: Tensor[T81Int, 2, 3] = Tensor[T81Int, 2, 3];
+    return 0;
+}

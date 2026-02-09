@@ -1,6 +1,6 @@
 # STATUS
 
-Snapshot date: 2026-02-08
+Snapshot date: 2026-02-09
 
 ## Current Phase
 
@@ -20,6 +20,16 @@ Repository foundation complete; migration execution in progress.
   - language-focused tests and vectors
 - Migration automation script added: `scripts/migrate-from-foundation.sh`.
 - Migration traceability manifest added: `docs/migration/migrated-from-t81-foundation.tsv`.
+- First runnable parser command added: `t81-lang parse <file.t81>` via `build/bin/t81-lang`.
+- Deterministic parser snapshot lane added: `scripts/check-parser-determinism.sh`.
+- Local command surface consolidated with top-level `Makefile`.
+- Runtime-coupled manifest reduced by converting `tests/roundtrip/lang_literal_pool_test.cpp` to language-only coverage.
+- Parser now supports logical precedence for `&&`/`||` with deterministic AST shape.
+- Parser/semantic MVP for `module` and `import` declarations added.
+- Function annotations `@effect` and `@tier(n)` added to parser + semantic validation surface.
+- Semantic suite stabilization completed; language-core lane now runs expanded semantic coverage.
+- `t81-lang check <entry.t81>` now validates import graph resolution, missing imports, and cycle detection.
+- Pure/effect boundary checks added: pure functions cannot call `@effect` functions.
 
 ## In Progress
 

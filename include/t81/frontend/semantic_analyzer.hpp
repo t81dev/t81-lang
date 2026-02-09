@@ -67,6 +67,8 @@ struct SemanticSymbol {
     Token declaration;  // Token where the symbol was declared
     Type type;                      // Variable type or function return type
     std::vector<Type> param_types;  // Only used for functions
+    bool is_effectful = false;      // Only used for functions
+    std::optional<std::int64_t> tier; // Only used for functions
     bool is_defined = false;        // Functions get declared first, defined later
 };
 
@@ -125,6 +127,8 @@ public:
     std::any visit(const BreakStmt& stmt) override;
     std::any visit(const ContinueStmt& stmt) override;
     std::any visit(const FunctionStmt& stmt) override;
+    std::any visit(const ModuleDecl& stmt) override;
+    std::any visit(const ImportDecl& stmt) override;
     std::any visit(const TypeDecl& stmt) override;
     std::any visit(const RecordDecl& stmt) override;
     std::any visit(const EnumDecl& stmt) override;
@@ -200,6 +204,7 @@ private:
     const std::vector<std::unique_ptr<Stmt>>& _statements;
     bool _had_error = false;
     std::vector<Type> _function_return_stack;
+    std::vector<bool> _function_effect_stack;
     std::vector<Diagnostic> _diagnostics;
     std::string _source_name;
 
@@ -226,6 +231,8 @@ private:
     std::unordered_map<const VectorLiteralExpr*, std::vector<float>> _vector_literal_data;
     std::unordered_map<std::string, RecordInfo> _record_definitions;
     std::unordered_map<std::string, EnumInfo> _enum_definitions;
+    std::optional<std::string> _declared_module;
+    std::unordered_set<std::string> _imports;
     const std::unordered_map<std::string, Type>* _current_type_env = nullptr;
 
     void analyze(const Stmt& stmt);

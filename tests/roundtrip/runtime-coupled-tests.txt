@@ -10,4 +10,3 @@ tests/roundtrip/e2e_match_expression_test.cpp
 tests/roundtrip/e2e_option_result_function_test.cpp
 tests/roundtrip/e2e_option_result_test.cpp
 tests/roundtrip/e2e_option_type_test.cpp
-tests/roundtrip/lang_literal_pool_test.cpp

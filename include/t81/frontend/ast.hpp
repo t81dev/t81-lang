@@ -9,6 +9,7 @@
 #include <utility>
 #include <optional>
 #include <cstdint>
+#include <string>
 
 namespace t81 {
 namespace frontend {
@@ -44,6 +45,8 @@ struct ReturnStmt;
 struct BreakStmt;
 struct ContinueStmt;
 struct FunctionStmt;
+struct ModuleDecl;
+struct ImportDecl;
 struct LoopStmt;
 struct TypeDecl;
 struct RecordDecl;
@@ -96,6 +99,8 @@ public:
     virtual std::any visit(const BreakStmt& stmt) = 0;
     virtual std::any visit(const ContinueStmt& stmt) = 0;
     virtual std::any visit(const FunctionStmt& stmt) = 0;
+    virtual std::any visit(const ModuleDecl& stmt) = 0;
+    virtual std::any visit(const ImportDecl& stmt) = 0;
     virtual std::any visit(const TypeDecl& stmt) = 0;
     virtual std::any visit(const RecordDecl& stmt) = 0;
     virtual std::any visit(const EnumDecl& stmt) = 0;
@@ -386,9 +391,22 @@ struct Parameter {
     std::unique_ptr<TypeExpr> type;
 };
 
+struct FunctionAttributes {
+    bool is_effectful = false;
+    std::optional<std::int64_t> tier;
+};
+
 struct FunctionStmt : Stmt {
-    FunctionStmt(Token name, std::vector<Parameter> params, std::unique_ptr<TypeExpr> return_type, std::vector<std::unique_ptr<Stmt>> body)
-        : name(name), params(std::move(params)), return_type(std::move(return_type)), body(std::move(body)) {}
+    FunctionStmt(Token name,
+                 std::vector<Parameter> params,
+                 std::unique_ptr<TypeExpr> return_type,
+                 std::vector<std::unique_ptr<Stmt>> body,
+                 FunctionAttributes attributes = {})
+        : name(name),
+          params(std::move(params)),
+          return_type(std::move(return_type)),
+          body(std::move(body)),
+          attributes(std::move(attributes)) {}
 
     std::any accept(StmtVisitor& visitor) const override { return visitor.visit(*this); }
 
@@ -396,6 +414,27 @@ struct FunctionStmt : Stmt {
     const std::vector<Parameter> params;
     const std::unique_ptr<TypeExpr> return_type;
     const std::vector<std::unique_ptr<Stmt>> body;
+    const FunctionAttributes attributes;
+};
+
+struct ModuleDecl : Stmt {
+    explicit ModuleDecl(Token keyword, std::string path)
+        : keyword(keyword), path(std::move(path)) {}
+
+    std::any accept(StmtVisitor& visitor) const override { return visitor.visit(*this); }
+
+    const Token keyword;
+    const std::string path;
+};
+
+struct ImportDecl : Stmt {
+    explicit ImportDecl(Token keyword, std::string path)
+        : keyword(keyword), path(std::move(path)) {}
+
+    std::any accept(StmtVisitor& visitor) const override { return visitor.visit(*this); }
+
+    const Token keyword;
+    const std::string path;
 };
 
 struct TypeDecl : Stmt {

@@ -1,0 +1,6 @@
+module app.main;
+import app.math;
+
+fn main() -> i32 {
+    return 0;
+}

@@ -15,6 +15,15 @@ jobs:
       - name: Run language-core checks
         run: scripts/check-lang-core.sh
 
+      - name: Module graph checks
+        run: scripts/check-module-graph.sh
+
+      - name: Parser determinism snapshots
+        run: scripts/check-parser-determinism.sh
+
+      - name: Spec coverage matrix
+        run: scripts/check-spec-coverage.sh
+
       - name: Compatibility discipline
         if: github.event_name == 'pull_request'
         run: BASE_REF="${{ github.base_ref }}" scripts/check-compat-discipline.sh

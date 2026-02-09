@@ -27,10 +27,17 @@ public:
     bool had_error() const { return _had_error; }
 
 private:
+    struct FunctionAttributesParse {
+        FunctionAttributes attributes;
+        std::optional<Token> anchor;
+    };
+
     // Grammar rule methods
     std::unique_ptr<Stmt> declaration();
+    std::unique_ptr<Stmt> module_declaration(Token keyword);
+    std::unique_ptr<Stmt> import_declaration(Token keyword);
     std::unique_ptr<Stmt> loop_statement();
-    std::unique_ptr<Stmt> function(const std::string& kind);
+    std::unique_ptr<Stmt> function(const std::string& kind, FunctionAttributes attributes = {});
     std::unique_ptr<Stmt> type_declaration();
     std::unique_ptr<Stmt> record_declaration(std::optional<StructuralAttributes> attributes = std::nullopt);
     std::unique_ptr<Stmt> enum_declaration(std::optional<StructuralAttributes> attributes = std::nullopt);
@@ -42,6 +49,8 @@ private:
 
     std::unique_ptr<Expr> expression();
     std::unique_ptr<Expr> assignment();
+    std::unique_ptr<Expr> logical_or();
+    std::unique_ptr<Expr> logical_and();
     std::unique_ptr<Expr> equality();
     std::unique_ptr<Expr> comparison();
     std::unique_ptr<Expr> term();
@@ -60,6 +69,7 @@ private:
                                std::unique_ptr<Expr>& guard_expr);
     std::unique_ptr<GenericTypeExpr> parse_generic_type(Token name);
     std::optional<StructuralAttributes> parse_structural_attributes();
+    std::optional<FunctionAttributesParse> parse_function_attributes();
 
     // Helper methods
     bool match(const std::vector<TokenType>& types);

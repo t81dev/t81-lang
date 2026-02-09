@@ -1,91 +1,61 @@
+#include "t81/frontend/ast_printer.hpp"
+#include "t81/frontend/lexer.hpp"
+#include "t81/frontend/parser.hpp"
+
 #include <cassert>
-#include <cmath>
-#include <functional>
+#include <iostream>
 #include <string>
-#include <t81/lang/compiler.hpp>
-#include <t81/lang/parser.hpp>
-#include <t81/vm/vm.hpp>
+
+using namespace t81::frontend;
 
 namespace {
-constexpr double expected_base81_float() {
-  // 1.20t81 = 1 + 2/81
-  return 1.0 + (2.0 / 81.0);
+
+std::string parse_to_canonical_ast(const std::string& source) {
+    Lexer lexer(source);
+    Parser parser(lexer, "lang_literal_pool_test");
+    auto statements = parser.parse();
+    if (parser.had_error()) {
+        return {};
+    }
+
+    CanonicalAstPrinter printer;
+    std::string output;
+    for (const auto& stmt : statements) {
+        if (!stmt) {
+            continue;
+        }
+        if (!output.empty()) {
+            output.push_back('\n');
+        }
+        output += printer.print(*stmt);
+    }
+    return output;
 }
 
-void run_and_check(const std::string& src,
-                   const std::function<void(const t81::vm::State&)>& verifier) {
-  [[maybe_unused]] auto mod_res= t81::lang::parse_module(src);
-  assert(mod_res.has_value());
-  [[maybe_unused]] t81::lang::Compiler comp;
-  [[maybe_unused]] auto prog_res= comp.compile(mod_res.value());
-  assert(prog_res.has_value());
-  [[maybe_unused]] auto vm= t81::vm::make_interpreter_vm();
-  vm->load_program(prog_res.value());
-  [[maybe_unused]] auto run_res= vm->run_to_halt();
-  assert(run_res.has_value());
-  verifier(vm->state());
-}
-}  // namespace
+} // namespace
 
 int main() {
-  using namespace t81;
+    const std::string source = R"(
+        fn main() -> i32 {
+            let i: i32 = 123;
+            let f: T81Float = 4.5;
+            return i;
+        }
+    )";
 
-  // Verify literals stored in registers map to pools.
-  run_and_check(
-      "fn main() -> T81Int { "
-      "let f: T81Float = 1.20t81; "
-      "let q: T81Fraction = 22/7t81; "
-      "let s: Symbol = :alpha; "
-      "return 0; }",
-      [](const vm::State& state) {
-        const double expected = expected_base81_float();
-        [[maybe_unused]] int float_handle= static_cast<int>(state.registers[1]);
-        assert(float_handle == 1);
-        assert(float_handle <= static_cast<int>(state.floats.size()));
-        assert(std::fabs(state.floats[float_handle - 1] - expected) < 1e-9);
+    const std::string first = parse_to_canonical_ast(source);
+    const std::string second = parse_to_canonical_ast(source);
+    assert(!first.empty());
+    assert(first == second);
 
-        [[maybe_unused]] int frac_handle= static_cast<int>(state.registers[2]);
-        assert(frac_handle == 1);
-        assert(frac_handle <= static_cast<int>(state.fractions.size()));
-        const auto& frac = state.fractions[frac_handle - 1];
-        assert(frac.num.to_int64() == 164);  // 22 base-81 = 164 decimal
-        assert(frac.den.to_int64() == 7);
+    const std::string expected =
+        "(fn main ( ) -> i32 (block (let i: i32 = 123) (let f: T81Float = 4.5) (return i)))";
+    if (first != expected) {
+        std::cerr << "Literal roundtrip determinism test failed\n";
+        std::cerr << "Expected: " << expected << "\n";
+        std::cerr << "Actual:   " << first << "\n";
+        return 1;
+    }
 
-        [[maybe_unused]] int sym_handle= static_cast<int>(state.registers[3]);
-        assert(sym_handle == 1);
-        assert(sym_handle <= static_cast<int>(state.symbols.size()));
-        assert(state.symbols[sym_handle - 1] == "alpha");
-      });
-
-  // Returning a float literal loads handle into R0.
-  run_and_check("fn main() -> T81Float { return 1.20t81; }",
-                [](const vm::State& state) {
-                  const double expected = expected_base81_float();
-                  [[maybe_unused]] int handle= static_cast<int>(state.registers[0]);
-                  assert(handle == 1);
-                  assert(handle <= static_cast<int>(state.floats.size()));
-                  assert(std::fabs(state.floats[handle - 1] - expected) < 1e-9);
-                });
-
-  // Returning a fraction literal.
-  run_and_check("fn main() -> T81Fraction { return 22/7t81; }",
-                [](const vm::State& state) {
-                  [[maybe_unused]] int handle= static_cast<int>(state.registers[0]);
-                  assert(handle == 1);
-                  assert(handle <= static_cast<int>(state.fractions.size()));
-                  const auto& frac = state.fractions[handle - 1];
-                  assert(frac.num.to_int64() == 164);
-                  assert(frac.den.to_int64() == 7);
-                });
-
-  // Returning a symbol literal.
-  run_and_check("fn main() -> Symbol { return :omega; }",
-                [](const vm::State& state) {
-                  [[maybe_unused]] int handle= static_cast<int>(state.registers[0]);
-                  assert(handle == 1);
-                  assert(handle <= static_cast<int>(state.symbols.size()));
-                  assert(state.symbols[handle - 1] == "omega");
-                });
-
-  return 0;
+    return 0;
 }

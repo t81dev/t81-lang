@@ -2,6 +2,7 @@
 #define T81_TISC_IR_HPP
 
 #include <optional>
+#include <cstdint>
 #include <string>
 #include <utility>
 #include <variant>
@@ -80,6 +81,12 @@ struct Instruction {
       : opcode(opcode_), operands(std::move(operands_)) {}
 };
 
+struct FunctionMetadata {
+  std::string name;
+  bool is_effectful = false;
+  std::optional<std::int64_t> tier;
+};
+
 class IntermediateProgram {
 public:
   void add_instruction(Instruction instr) {
@@ -98,6 +105,14 @@ public:
     return type_aliases_;
   }
 
+  void add_function_metadata(FunctionMetadata meta) {
+    function_metadata_.push_back(std::move(meta));
+  }
+
+  const std::vector<FunctionMetadata>& function_metadata() const {
+    return function_metadata_;
+  }
+
   int add_tensor(t81::T729Tensor tensor) {
     tensor_pool_.push_back(std::move(tensor));
     return static_cast<int>(tensor_pool_.size());
@@ -110,6 +125,7 @@ public:
 private:
   std::vector<Instruction> instructions_;
   std::vector<TypeAliasMetadata> type_aliases_;
+  std::vector<FunctionMetadata> function_metadata_;
   std::vector<t81::T729Tensor> tensor_pool_;
 };
 

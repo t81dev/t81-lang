@@ -38,7 +38,7 @@ int main() {
     const char* source = R"(module my_mod;
 
 fn main() -> i32 {
-    [[maybe_unused]] let x= 1;
+    let x = 1;
     return x;
 }
 )";

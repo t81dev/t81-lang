@@ -1,6 +1,6 @@
 # Runtime-Coupled Test Justification
 
-Snapshot date: 2026-02-08
+Snapshot date: 2026-02-09
 
 Tracking issue: `t81-lang#3`
 
@@ -19,7 +19,6 @@ This document is the explicit rationale ledger for every entry in
 - tests/roundtrip/e2e_option_result_function_test.cpp: Uses `t81/tisc/binary_emitter.hpp` and `t81/vm/*` for option/result runtime path.
 - tests/roundtrip/e2e_option_result_test.cpp: Uses `t81/tisc/binary_emitter.hpp` and `t81/vm/*` for option/result runtime path.
 - tests/roundtrip/e2e_option_type_test.cpp: Uses `t81/tisc/binary_emitter.hpp` and `t81/vm/vm.hpp` to validate option type emission/execution.
-- tests/roundtrip/lang_literal_pool_test.cpp: Uses `t81/vm/vm.hpp` to validate emitted literal pool execution behavior.
 
 ## Shrink Rule
 

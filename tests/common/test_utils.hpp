@@ -101,7 +101,14 @@ public:
 
     std::any visit(const FunctionStmt& stmt) override {
         [[maybe_unused]] std::stringstream ss;
-        ss << "(fn " << stmt.name.lexeme;
+        ss << "(fn";
+        if (stmt.attributes.is_effectful) {
+            ss << " @effect";
+        }
+        if (stmt.attributes.tier.has_value()) {
+            ss << " @tier(" << *stmt.attributes.tier << ")";
+        }
+        ss << " " << stmt.name.lexeme;
         ss << " (";
         for (size_t i = 0; i < stmt.params.size(); ++i) {
             ss << stmt.params[i].name.lexeme << ": " << print(*stmt.params[i].type);
@@ -121,6 +128,14 @@ public:
         ss << ")";
         ss << ")";
         return ss.str();
+    }
+
+    std::any visit(const ModuleDecl& stmt) override {
+        return std::string("(module " + stmt.path + ")");
+    }
+
+    std::any visit(const ImportDecl& stmt) override {
+        return std::string("(import " + stmt.path + ")");
     }
 
     std::any visit(const TypeDecl& stmt) override {
@@ -321,10 +336,20 @@ inline void expect_semantic_success(const std::string& source, const char* label
     Lexer lexer(source);
     Parser parser(lexer);
     [[maybe_unused]] auto stmts= parser.parse();
+    if (parser.had_error()) {
+        std::cerr << "[" << label << "] parser reported errors\n";
+    }
     assert(!parser.had_error() && label);
 
     SemanticAnalyzer analyzer(stmts);
     analyzer.analyze();
+    if (analyzer.had_error()) {
+        std::cerr << "[" << label << "] semantic diagnostics:\n";
+        for (const auto& diag : analyzer.diagnostics()) {
+            std::cerr << "  " << diag.file << ":" << diag.line << ":" << diag.column
+                      << ": " << diag.message << "\n";
+        }
+    }
     assert(!analyzer.had_error() && label);
 }
 

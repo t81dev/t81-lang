@@ -94,7 +94,10 @@ Token Parser::previous() {
 Token Parser::consume(TokenType type, const char* message) {
     if (check(type)) return advance();
     report_error(peek(), message);
-    return {};
+    if (!is_at_end()) {
+        return advance();
+    }
+    return Token{TokenType::Illegal, "", peek().line, peek().column};
 }
 
 // Discards tokens until it finds a likely statement boundary. This is a
@@ -127,6 +130,9 @@ void Parser::synchronize() {
 std::unique_ptr<Stmt> Parser::declaration() {
     try {
         auto struct_attrs = parse_structural_attributes();
+        auto fn_attrs = parse_function_attributes();
+        if (match({TokenType::Module})) return module_declaration(previous());
+        if (match({TokenType::Import})) return import_declaration(previous());
         if (match({TokenType::Type})) return type_declaration();
         if (match({TokenType::Record})) return record_declaration(struct_attrs);
         if (match({TokenType::Enum})) return enum_declaration(struct_attrs);
@@ -134,7 +140,14 @@ std::unique_ptr<Stmt> Parser::declaration() {
             const Token& anchor = struct_attrs->anchor.value_or(peek());
             report_error(anchor, "Structural attributes may only decorate records or enums.");
         }
-        if (match({TokenType::Fn})) return function("function");
+        if (match({TokenType::Fn})) {
+            FunctionAttributes attrs = fn_attrs.has_value() ? fn_attrs->attributes : FunctionAttributes{};
+            return function("function", std::move(attrs));
+        }
+        if (fn_attrs.has_value()) {
+            const Token& anchor = fn_attrs->anchor.value_or(peek());
+            report_error(anchor, "Function attributes may only decorate functions.");
+        }
         if (match({TokenType::Var})) return var_declaration();
         if (match({TokenType::Let})) return let_declaration();
         return statement();
@@ -144,9 +157,33 @@ std::unique_ptr<Stmt> Parser::declaration() {
     }
 }
 
+std::unique_ptr<Stmt> Parser::module_declaration(Token keyword) {
+    Token segment = consume(TokenType::Identifier, "Expect module path after 'module'.");
+    std::string path(segment.lexeme);
+    while (match({TokenType::Dot})) {
+        Token next = consume(TokenType::Identifier, "Expect module segment after '.'.");
+        path.push_back('.');
+        path.append(next.lexeme.data(), next.lexeme.size());
+    }
+    consume(TokenType::Semicolon, "Expect ';' after module declaration.");
+    return std::make_unique<ModuleDecl>(keyword, std::move(path));
+}
+
+std::unique_ptr<Stmt> Parser::import_declaration(Token keyword) {
+    Token segment = consume(TokenType::Identifier, "Expect import path after 'import'.");
+    std::string path(segment.lexeme);
+    while (match({TokenType::Dot})) {
+        Token next = consume(TokenType::Identifier, "Expect import segment after '.'.");
+        path.push_back('.');
+        path.append(next.lexeme.data(), next.lexeme.size());
+    }
+    consume(TokenType::Semicolon, "Expect ';' after import declaration.");
+    return std::make_unique<ImportDecl>(keyword, std::move(path));
+}
+
 // Parses a function declaration.
 // function -> "fn" IDENTIFIER "(" parameters? ")" ( "->" type )? "{" block "}" ;
-std::unique_ptr<Stmt> Parser::function(const std::string& kind) {
+std::unique_ptr<Stmt> Parser::function(const std::string& kind, FunctionAttributes attributes) {
     Token name = consume(TokenType::Identifier, ("Expect " + kind + " name.").c_str());
     consume(TokenType::LParen, ("Expect '(' after " + kind + " name.").c_str());
     std::vector<Parameter> parameters;
@@ -169,7 +206,7 @@ std::unique_ptr<Stmt> Parser::function(const std::string& kind) {
 
     consume(TokenType::LBrace, ("Expect '{' before " + kind + " body.").c_str());
     std::vector<std::unique_ptr<Stmt>> body = block();
-    return std::make_unique<FunctionStmt>(name, std::move(parameters), std::move(return_type), std::move(body));
+    return std::make_unique<FunctionStmt>(name, std::move(parameters), std::move(return_type), std::move(body), std::move(attributes));
 }
 
 std::unique_ptr<Stmt> Parser::type_declaration() {
@@ -364,7 +401,7 @@ std::unique_ptr<Expr> Parser::expression() {
 // Parses an assignment expression.
 // assignment -> IDENTIFIER "=" assignment | equality ;
 std::unique_ptr<Expr> Parser::assignment() {
-    std::unique_ptr<Expr> expr = equality();
+    std::unique_ptr<Expr> expr = logical_or();
     if (match({TokenType::Equal})) {
         Token equals = previous();
         std::unique_ptr<Expr> value = assignment();
@@ -373,6 +410,26 @@ std::unique_ptr<Expr> Parser::assignment() {
             return std::make_unique<AssignExpr>(name, std::move(value));
         }
         report_error(equals, "Invalid assignment target");
+    }
+    return expr;
+}
+
+std::unique_ptr<Expr> Parser::logical_or() {
+    std::unique_ptr<Expr> expr = logical_and();
+    while (match({TokenType::PipePipe})) {
+        Token op = previous();
+        std::unique_ptr<Expr> right = logical_and();
+        expr = std::make_unique<BinaryExpr>(std::move(expr), op, std::move(right));
+    }
+    return expr;
+}
+
+std::unique_ptr<Expr> Parser::logical_and() {
+    std::unique_ptr<Expr> expr = equality();
+    while (match({TokenType::AmpAmp})) {
+        Token op = previous();
+        std::unique_ptr<Expr> right = equality();
+        expr = std::make_unique<BinaryExpr>(std::move(expr), op, std::move(right));
     }
     return expr;
 }
@@ -722,6 +779,53 @@ std::optional<StructuralAttributes> Parser::parse_structural_attributes() {
 
         consume(TokenType::RParen, "Expect ')' after attribute.");
     }
+    if (!seen) {
+        return std::nullopt;
+    }
+    return attrs;
+}
+
+std::optional<Parser::FunctionAttributesParse> Parser::parse_function_attributes() {
+    FunctionAttributesParse attrs;
+    bool seen = false;
+    while (check(TokenType::At)) {
+        Token lookahead = _lexer.peek_next_token();
+        if (lookahead.type != TokenType::Identifier) {
+            break;
+        }
+        std::string attr_candidate{lookahead.lexeme};
+        if (attr_candidate != "effect" && attr_candidate != "tier") {
+            break;
+        }
+
+        match({TokenType::At});
+        Token name = consume(TokenType::Identifier, "Expect attribute name after '@'.");
+        if (!seen) {
+            attrs.anchor = name;
+        }
+        seen = true;
+
+        std::string attr_name{name.lexeme};
+        if (attr_name == "effect") {
+            attrs.attributes.is_effectful = true;
+            continue;
+        }
+
+        consume(TokenType::LParen, "Expect '(' after '@tier'.");
+        Token value = consume(TokenType::Integer, "Expect integer tier value.");
+        consume(TokenType::RParen, "Expect ')' after tier value.");
+        try {
+            std::int64_t tier = std::stoll(std::string(value.lexeme));
+            if (tier <= 0) {
+                report_error(value, "Tier value must be positive.");
+            } else {
+                attrs.attributes.tier = tier;
+            }
+        } catch (const std::exception&) {
+            report_error(value, "Invalid integer for tier value.");
+        }
+    }
+
     if (!seen) {
         return std::nullopt;
     }

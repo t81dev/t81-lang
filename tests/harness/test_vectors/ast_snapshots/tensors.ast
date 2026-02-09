@@ -1,0 +1,2 @@
+(type TensorAlias [T, N] = (generic Tensor T N))
+(fn main ( ) -> i32 (block (let data: (generic Tensor T81Int 2 3) = (generic Tensor T81Int 2 3)) (return 0)))

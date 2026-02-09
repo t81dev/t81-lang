@@ -1,6 +1,6 @@
 # ROADMAP
 
-Snapshot date: 2026-02-08
+Snapshot date: 2026-02-09
 
 ## M0: Foundation (current)
 
@@ -17,9 +17,12 @@ Snapshot date: 2026-02-08
 - Add cross-repo compatibility matrix and transition notes.
 - Validate no behavior regression in `t81-foundation` integration tests after extraction.
 
-Current status (2026-02-08):
+Current status (2026-02-09):
 
 - Completed: initial asset migration import + migration script + traceability manifest.
+- Completed: first runnable `t81-lang parse` command and parser determinism snapshot lane.
+- Completed: module/import parser MVP, function annotation (`@effect`, `@tier`) parser MVP, and logical `&&`/`||` precedence wiring.
+- Completed: expanded semantic test stabilization in language-core lane.
 - In progress: decoupling migrated tests from runtime-owned internals and wiring split CI lanes.
 
 ## M1: Frontend Core
